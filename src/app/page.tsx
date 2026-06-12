@@ -7,8 +7,6 @@ import {
   CardHeader,
   CardTitle,
 } from "../components/ui/card";
-import logo from "@/src/app/icon.png";
-import Image from "next/image";
 import { AppLink } from "../components/navigation/AppLink";
 
 const highlights = [
@@ -35,68 +33,82 @@ const highlights = [
 export default function HomePage() {
   return (
     <main className="min-h-screen overflow-hidden bg-background text-foreground">
-      <section className="relative mx-auto flex min-h-screen max-w-7xl flex-col px-6 py-8">
-        <div className="absolute inset-x-6 top-6 h-72 rounded-[3rem]" />
+      <section className="relative mx-auto flex min-h-screen max-w-7xl flex-col px-4 py-4 sm:px-6 sm:py-8">
+        <div className="absolute inset-x-4 top-6 h-72 rounded-[3rem] sm:inset-x-6" />
 
-        <header className="relative z-10 flex items-center justify-between rounded-full border bg-white/80 px-5 py-3 shadow-sm backdrop-blur">
-          <AppLink href="/" className="flex items-center gap-3">
-            <Image src={logo} alt="Mundial Typer" width={48} height={48} />
-            <div>
-              <p className="font-heading text-lg leading-none">Mundial Typer</p>
-              <p className="text-xs text-muted-foreground">Liga piwna 2026</p>
+        <header className="relative z-10 flex items-center justify-between gap-2 rounded-full border bg-white/80 px-3 py-2 shadow-sm backdrop-blur sm:px-5 sm:py-3">
+          <AppLink href="/" className="flex items-center gap-2 min-w-0">
+            <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-foreground text-sm font-bold text-background sm:h-10 sm:w-10">
+              26
+            </div>
+            <div className="min-w-0">
+              <p className="truncate font-heading text-sm leading-none sm:text-lg">
+                Mundial Typer
+              </p>
+              <p className="truncate text-xs text-muted-foreground">
+                Liga piwna 2026
+              </p>
             </div>
           </AppLink>
 
-          <div className="flex items-center gap-2">
-            <Button asChild variant="ghost" className="hidden sm:inline-flex">
+          <div className="flex shrink-0 items-center gap-2">
+            <Button
+              asChild
+              variant="ghost"
+              className="hidden text-xs sm:inline-flex sm:text-sm"
+            >
               <AppLink href="/login">Logowanie</AppLink>
             </Button>
-            <Button asChild className="rounded-full">
+            <Button asChild className="rounded-full text-xs sm:text-sm">
               <AppLink href="/register">Wbijam</AppLink>
             </Button>
           </div>
         </header>
 
-        <div className="relative z-10 grid flex-1 items-center gap-12 py-20 lg:grid-cols-[1.05fr_0.95fr]">
+        <div className="relative z-10 grid flex-1 items-center gap-8 py-8 sm:py-12 md:py-20 lg:grid-cols-[1.05fr_0.95fr] lg:gap-12">
           <div>
-            <Badge className="mb-6 rounded-full bg-white px-4 py-2 text-foreground shadow-sm hover:bg-white">
+            <Badge className="mb-4 rounded-full bg-white px-3 py-1 text-xs text-foreground shadow-sm hover:bg-white sm:mb-6 sm:px-4 sm:py-2 sm:text-sm">
               Mundial 2026 • znajomi • typy • piwo
             </Badge>
 
-            <h1 className="max-w-4xl text-6xl font-black uppercase leading-[0.92] tracking-tight sm:text-7xl lg:text-8xl">
+            <h1 className="max-w-4xl text-3xl font-black uppercase leading-[0.92] tracking-tight sm:text-4xl md:text-5xl lg:text-8xl">
               Typuj jak selekcjoner.
               <span className="block text-primary">Płać jak przegrany.</span>
             </h1>
 
-            <p className="mt-7 max-w-2xl text-lg leading-8 text-muted-foreground">
+            <p className="mt-4 max-w-2xl text-sm leading-6 text-muted-foreground sm:mt-7 sm:text-lg sm:leading-8">
               Prywatna liga typerów na fazę grupową Mundialu 2026. Zasady są
               proste: trafiasz wynik, zbierasz punkty, a zwycięzca zgarnia tyle
               butelek piwa, ile nastukał punktów.
             </p>
 
-            <div className="mt-9 flex flex-col gap-3 sm:flex-row">
-              <Button asChild size="lg" className="rounded-full px-8 text-base">
+            <div className="mt-6 flex flex-col gap-2 sm:gap-3 sm:flex-row md:mt-9">
+              <Button
+                asChild
+                size="sm"
+                className="rounded-full px-6 text-xs sm:size-lg sm:px-8 sm:text-base"
+              >
                 <AppLink href="/register">Zakładam konto</AppLink>
               </Button>
 
               <Button
                 asChild
-                size="lg"
+                size="sm"
                 variant="outline"
-                className="rounded-full bg-white px-8 text-base"
+                className="rounded-full bg-white px-6 text-xs sm:size-lg sm:px-8 sm:text-base"
               >
                 <AppLink href="/login">Mam już konto</AppLink>
               </Button>
             </div>
 
-            <div className="mt-8 flex flex-wrap gap-3 text-sm font-medium">
-              <span className="rounded-full bg-white px-4 py-2 shadow-sm">
+            <div className="mt-5 flex flex-wrap gap-2 text-xs font-medium sm:mt-8 sm:gap-3 sm:text-sm">
+              <span className="rounded-full bg-white px-3 py-1.5 shadow-sm sm:px-4 sm:py-2">
                 3 pkt dokładny wynik
               </span>
-              <span className="rounded-full bg-white px-4 py-2 shadow-sm">
+              <span className="rounded-full bg-white px-3 py-1.5 shadow-sm sm:px-4 sm:py-2">
                 1 pkt zwycięzca/remis
               </span>
-              <span className="rounded-full bg-white px-4 py-2 shadow-sm">
+              <span className="rounded-full bg-white px-3 py-1.5 shadow-sm sm:px-4 sm:py-2">
                 0 pkt za zapominalstwo
               </span>
             </div>
@@ -104,25 +116,29 @@ export default function HomePage() {
 
           <div className="relative">
             <Card className="rotate-1 border-0 bg-foreground text-background shadow-2xl">
-              <CardContent className="p-8">
-                <p className="text-sm uppercase tracking-[0.3em] text-background/60">
+              <CardContent className="p-5 sm:p-8">
+                <p className="text-xs uppercase tracking-[0.3em] text-background/60 sm:text-sm">
                   Nagroda główna
                 </p>
 
-                <div className="mt-8 flex items-end gap-4">
-                  <span className="font-heading text-8xl leading-none">P</span>
-                  <div className="pb-3">
-                    <p className="text-2xl font-black">punktów</p>
-                    <p className="text-background/70">= butelek piwa</p>
+                <div className="mt-5 flex items-end gap-3 sm:mt-8 sm:gap-4">
+                  <span className="font-heading text-5xl leading-none sm:text-8xl">
+                    P
+                  </span>
+                  <div className="pb-2 sm:pb-3">
+                    <p className="text-lg font-black sm:text-2xl">punktów</p>
+                    <p className="text-xs sm:text-sm text-background/70">
+                      = butelek piwa
+                    </p>
                   </div>
                 </div>
 
-                <div className="mt-8 rounded-3xl bg-white/10 p-5">
-                  <div className="flex items-center gap-4">
-                    <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-accent text-accent-foreground">
-                      <Beer className="h-7 w-7" />
+                <div className="mt-5 rounded-3xl bg-white/10 p-4 sm:mt-8 sm:p-5">
+                  <div className="flex items-center gap-3 sm:gap-4">
+                    <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-accent text-accent-foreground sm:h-14 sm:w-14">
+                      <Beer className="h-5 w-5 sm:h-7 sm:w-7" />
                     </div>
-                    <p className="text-sm leading-6 text-background/80">
+                    <p className="text-xs leading-5 text-background/80 sm:text-sm sm:leading-6">
                       Zwycięzca nie tylko ma rację. Zwycięzca ma zapas w
                       lodówce.
                     </p>
@@ -131,28 +147,30 @@ export default function HomePage() {
               </CardContent>
             </Card>
 
-            <div className="absolute -bottom-6 -left-6 hidden rounded-3xl bg-primary p-5 text-primary-foreground shadow-xl md:block">
-              <p className="font-heading text-4xl">72</p>
-              <p className="text-sm">mecze fazy grupowej</p>
+            <div className="absolute -bottom-5 -left-5 rounded-2xl bg-primary p-3 text-primary-foreground shadow-xl sm:-bottom-6 sm:-left-6 sm:rounded-3xl sm:p-5 md:block">
+              <p className="font-heading text-3xl sm:text-4xl">72</p>
+              <p className="text-xs sm:text-sm">mecze fazy grupowej</p>
             </div>
           </div>
         </div>
 
-        <div className="relative z-10 grid gap-4 pb-10 md:grid-cols-3">
+        <div className="relative z-10 grid gap-3 pb-6 sm:gap-4 sm:pb-10 md:grid-cols-3">
           {highlights.map((item) => {
             const Icon = item.icon;
 
             return (
               <Card key={item.title} className="border-0 bg-white shadow-sm">
-                <CardHeader>
-                  <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-2xl bg-primary/10 text-primary">
-                    <Icon className="h-6 w-6" />
+                <CardHeader className="pb-3 sm:pb-6">
+                  <div className="mb-2 flex h-10 w-10 items-center justify-center rounded-2xl bg-primary/10 text-primary sm:mb-4 sm:h-12 sm:w-12">
+                    <Icon className="h-5 w-5 sm:h-6 sm:w-6" />
                   </div>
-                  <CardTitle>{item.title}</CardTitle>
+                  <CardTitle className="text-base sm:text-lg">
+                    {item.title}
+                  </CardTitle>
                 </CardHeader>
 
-                <CardContent>
-                  <p className="text-sm leading-6 text-muted-foreground">
+                <CardContent className="pt-0">
+                  <p className="text-xs leading-5 text-muted-foreground sm:text-sm sm:leading-6">
                     {item.description}
                   </p>
                 </CardContent>
