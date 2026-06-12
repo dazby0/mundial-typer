@@ -59,6 +59,9 @@ export function LoginForm() {
               id="username"
               placeholder="Twój legendarny nick"
               autoComplete="username"
+              autoCapitalize="none"
+              autoCorrect="off"
+              spellCheck={false}
               {...register("username")}
             />
             {errors.username ? (
@@ -73,6 +76,9 @@ export function LoginForm() {
               type="password"
               placeholder="Hasło do strefy piwnej"
               autoComplete="current-password"
+              autoCapitalize="none"
+              autoCorrect="off"
+              spellCheck={false}
               {...register("password")}
             />
             {errors.password ? (
