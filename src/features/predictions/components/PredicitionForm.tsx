@@ -112,10 +112,15 @@ export function PredictionForm({
 
       <div className="mt-5 grid grid-cols-[1fr_auto_1fr] items-center gap-3">
         <Input
-          type="number"
-          min={0}
+          type="text"
+          inputMode="numeric"
+          pattern="[0-9]*"
+          maxLength={2}
           value={homeScore}
-          onChange={(event) => setHomeScore(event.target.value)}
+          onChange={(event) => {
+            const value = event.target.value.replace(/\D/g, "").slice(0, 2);
+            setHomeScore(value);
+          }}
           className="h-14 text-center text-xl font-bold placeholder:text-muted-foreground/35"
           placeholder="0"
         />
@@ -123,10 +128,15 @@ export function PredictionForm({
         <span className="font-heading text-3xl">:</span>
 
         <Input
-          type="number"
-          min={0}
+          type="text"
+          inputMode="numeric"
+          pattern="[0-9]*"
+          maxLength={2}
           value={awayScore}
-          onChange={(event) => setAwayScore(event.target.value)}
+          onChange={(event) => {
+            const value = event.target.value.replace(/\D/g, "").slice(0, 2);
+            setAwayScore(value);
+          }}
           className="h-14 text-center text-xl font-bold placeholder:text-muted-foreground/35"
           placeholder="0"
         />
