@@ -1,7 +1,7 @@
-import Link from "next/link";
 import { AlarmClock, Siren } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { MatchListItem } from "@/src/features/matches/types/match.types";
+import { AppLink } from "@/src/components/navigation/AppLink";
 
 type PredictionUrgencyAlertProps = {
   todayMatches: MatchListItem[];
@@ -55,7 +55,7 @@ export function PredictionUrgencyAlert({
           asChild
           className="rounded-full bg-background text-foreground hover:bg-background/90"
         >
-          <Link href="/predictions?mode=panic">Pokaż tryb paniki</Link>
+          <AppLink href="/predictions?mode=panic">Pokaż tryb paniki</AppLink>
         </Button>
       </div>
     </div>

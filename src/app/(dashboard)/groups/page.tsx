@@ -125,13 +125,14 @@ export default async function GroupsPage() {
 
           <p className="mt-2 text-sm text-background/70">
             Czyli klasycznie: 3 pkt za zwycięstwo, 1 pkt za remis, 0 pkt za
-            piłkarskie nieszczęście. Pełne FIFA tie-breakery ogarniemy później,
-            jak już aplikacja zacznie wyglądać jak VAR dla znajomych.
+            piłkarskie nieszczęście. Dwie najlepsze drużyny z każdej grupy
+            awansują bez gadania, a najlepsze ekipy z 3. miejsc dalej walczą o
+            chwałę i unikają wcześniejszego pakowania walizek.
           </p>
         </div>
       </div>
 
-      <div className="mt-6 grid gap-5 xl:grid-cols-2">
+      <div className="mt-6 grid items-start gap-5 xl:grid-cols-2">
         {groupNames.map((groupName) => (
           <GroupStandingCard
             key={groupName}

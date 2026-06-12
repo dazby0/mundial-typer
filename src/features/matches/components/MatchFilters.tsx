@@ -1,5 +1,5 @@
-import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import { AppLink } from "@/src/components/navigation/AppLink";
 import {
   createMatchesUrl,
   MatchFilter,
@@ -52,7 +52,7 @@ export function MatchFilters(props: MatchFiltersProps) {
                 : "h-auto justify-between rounded-3xl bg-white p-4"
             }
           >
-            <Link
+            <AppLink
               href={createMatchesUrl(
                 filter.value,
                 props.activeGroup,
@@ -69,7 +69,7 @@ export function MatchFilters(props: MatchFiltersProps) {
               <span className="font-heading text-2xl">
                 {filter.getCount(props)}
               </span>
-            </Link>
+            </AppLink>
           </Button>
         );
       })}

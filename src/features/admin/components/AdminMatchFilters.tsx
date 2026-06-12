@@ -1,5 +1,5 @@
-import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import { AppLink } from "@/src/components/navigation/AppLink";
 import {
   AdminMatchStatusFilter,
   createAdminMatchesUrl,
@@ -54,7 +54,7 @@ export function AdminMatchFilters(props: AdminMatchFiltersProps) {
                   : "h-auto justify-between rounded-3xl bg-white p-4"
               }
             >
-              <Link
+              <AppLink
                 href={createAdminMatchesUrl(filter.value, props.activeGroup)}
               >
                 <span className="text-left">
@@ -67,7 +67,7 @@ export function AdminMatchFilters(props: AdminMatchFiltersProps) {
                 <span className="font-heading text-2xl">
                   {filter.getCount(props)}
                 </span>
-              </Link>
+              </AppLink>
             </Button>
           );
         })}
@@ -91,9 +91,9 @@ export function AdminMatchFilters(props: AdminMatchFiltersProps) {
                 : "shrink-0 rounded-full bg-white"
             }
           >
-            <Link href={createAdminMatchesUrl(props.activeStatus, "all")}>
+            <AppLink href={createAdminMatchesUrl(props.activeStatus, "all")}>
               Wszystkie grupy
-            </Link>
+            </AppLink>
           </Button>
 
           {props.groups.map((group) => {
@@ -110,9 +110,11 @@ export function AdminMatchFilters(props: AdminMatchFiltersProps) {
                     : "shrink-0 rounded-full bg-white"
                 }
               >
-                <Link href={createAdminMatchesUrl(props.activeStatus, group)}>
+                <AppLink
+                  href={createAdminMatchesUrl(props.activeStatus, group)}
+                >
                   {formatGroupName(group)}
-                </Link>
+                </AppLink>
               </Button>
             );
           })}

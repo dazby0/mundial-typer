@@ -16,7 +16,8 @@ import {
   getTodayUnpredictedMatches,
   getUrgentUnpredictedMatches,
 } from "@/src/features/predictions/utils/prediction-checklist";
-import Link from "next/link";
+import { PredictionChecklistItem } from "@/src/features/predictions/components/PredictionCheckListItem";
+import { AppLink } from "@/src/components/navigation/AppLink";
 
 type PredictionsPageProps = {
   searchParams: Promise<{
@@ -202,62 +203,91 @@ export default async function PredictionsPage({
               </div>
 
               <Button asChild variant="secondary" className="rounded-full">
-                <Link href="/predictions">Wyjdź z paniki</Link>
+                <AppLink href="/predictions">Wyjdź z paniki</AppLink>
               </Button>
             </div>
           </div>
         ) : null}
       </div>
 
-      <Accordion
-        type="multiple"
-        defaultValue={["to-predict"]}
-        className="mt-6 space-y-5"
-      >
-        <PredictionAccordionSection
-          value="to-predict"
-          title={isPanicMode ? "Tryb paniki" : "Do obstawienia"}
-          description={
-            isPanicMode
-              ? "Tu są mecze, które nie lubią czekać. Typuj teraz, tłumacz się później."
-              : "Tu są mecze, które jeszcze czekają na Twoją wielką analizę. Albo na strzał z biodra."
-          }
-          emptyTitle={
-            isPanicMode ? "Panika odwołana" : "Czysto. Wszystko obstawione."
-          }
-          emptyDescription={
-            isPanicMode
-              ? "Nie ma pilnych meczów bez typu. Możesz wrócić do udawania spokoju."
-              : "Nie wiemy, czy to profesjonalizm, czy przypadek, ale wygląda dobrze."
-          }
-          matches={displayedMatchesToPredict}
-          predictionsByMatchId={predictionsByMatchId}
-        />
+      {isPanicMode ? (
+        <div className="mt-6 rounded-[2rem] bg-white p-6 shadow-sm">
+          <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+            <div>
+              <div className="flex items-center gap-3">
+                <h2 className="text-2xl font-black">
+                  Mecze do szybkiego obstawienia
+                </h2>
 
-        {!isPanicMode ? (
-          <>
-            <PredictionAccordionSection
-              value="confirmed"
-              title="Typy zatwierdzone"
-              description="Tutaj leżą Twoje zapisane typy. Na razie brzmią mądrze, bo piłka jeszcze ich nie zweryfikowała."
-              emptyTitle="Brak zatwierdzonych typów."
-              emptyDescription="Trochę pusto. Bukmacher by zapłakał, ale aplikacja cierpliwie czeka."
-              matches={confirmedPredictions}
-              predictionsByMatchId={predictionsByMatchId}
-            />
+                <span className="rounded-full bg-background px-3 py-1 text-sm font-semibold">
+                  {displayedMatchesToPredict.length}
+                </span>
+              </div>
 
-            <PredictionAccordionSection
-              value="closed"
-              title="Zamknięte i rozliczone"
-              description="Mecze po pierwszym gwizdku. Tutaj kończy się gadanie, a zaczyna brutalna matematyka punktów."
-              emptyTitle="Jeszcze nic nie zamknięte."
-              emptyDescription="Spokojnie, kompromitacja przyjdzie z czasem. Mundial jest długi."
-              matches={closedMatches}
-              predictionsByMatchId={predictionsByMatchId}
-            />
-          </>
-        ) : null}
-      </Accordion>
+              <p className="mt-1 text-sm text-muted-foreground">
+                Tu nie ma rozwijania, szukania i filozofii. Widzisz mecz,
+                klikasz typ, ratujesz honor.
+              </p>
+            </div>
+          </div>
+
+          {displayedMatchesToPredict.length === 0 ? (
+            <div className="mt-5 rounded-3xl bg-background p-6">
+              <p className="font-bold">Panika odwołana</p>
+              <p className="mt-1 text-sm text-muted-foreground">
+                Nie ma pilnych meczów bez typu. Możesz wrócić do udawania
+                spokoju.
+              </p>
+            </div>
+          ) : (
+            <div className="mt-5 space-y-4">
+              {displayedMatchesToPredict.map((match) => (
+                <PredictionChecklistItem
+                  key={match.id}
+                  match={match}
+                  prediction={predictionsByMatchId.get(match.id)}
+                />
+              ))}
+            </div>
+          )}
+        </div>
+      ) : (
+        <Accordion
+          type="multiple"
+          defaultValue={["to-predict"]}
+          className="mt-6 space-y-5"
+        >
+          <PredictionAccordionSection
+            value="to-predict"
+            title="Do obstawienia"
+            description="Tu są mecze, które jeszcze czekają na Twoją wielką analizę. Albo na strzał z biodra."
+            emptyTitle="Czysto. Wszystko obstawione."
+            emptyDescription="Nie wiemy, czy to profesjonalizm, czy przypadek, ale wygląda dobrze."
+            matches={displayedMatchesToPredict}
+            predictionsByMatchId={predictionsByMatchId}
+          />
+
+          <PredictionAccordionSection
+            value="confirmed"
+            title="Typy zatwierdzone"
+            description="Tutaj leżą Twoje zapisane typy. Na razie brzmią mądrze, bo piłka jeszcze ich nie zweryfikowała."
+            emptyTitle="Brak zatwierdzonych typów."
+            emptyDescription="Trochę pusto. Bukmacher by zapłakał, ale aplikacja cierpliwie czeka."
+            matches={confirmedPredictions}
+            predictionsByMatchId={predictionsByMatchId}
+          />
+
+          <PredictionAccordionSection
+            value="closed"
+            title="Zamknięte i rozliczone"
+            description="Mecze po pierwszym gwizdku. Tutaj kończy się gadanie, a zaczyna brutalna matematyka punktów."
+            emptyTitle="Jeszcze nic nie zamknięte."
+            emptyDescription="Spokojnie, kompromitacja przyjdzie z czasem. Mundial jest długi."
+            matches={closedMatches}
+            predictionsByMatchId={predictionsByMatchId}
+          />
+        </Accordion>
+      )}
     </section>
   );
 }

@@ -116,7 +116,7 @@ export function PredictionForm({
           min={0}
           value={homeScore}
           onChange={(event) => setHomeScore(event.target.value)}
-          className="h-14 text-center text-xl font-bold"
+          className="h-14 text-center text-xl font-bold placeholder:text-muted-foreground/35"
           placeholder="0"
         />
 
@@ -127,7 +127,7 @@ export function PredictionForm({
           min={0}
           value={awayScore}
           onChange={(event) => setAwayScore(event.target.value)}
-          className="h-14 text-center text-xl font-bold"
+          className="h-14 text-center text-xl font-bold placeholder:text-muted-foreground/35"
           placeholder="0"
         />
       </div>

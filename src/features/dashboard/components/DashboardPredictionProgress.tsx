@@ -1,5 +1,5 @@
-import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import { AppLink } from "@/src/components/navigation/AppLink";
 
 type DashboardPredictionProgressProps = {
   predicted: number;
@@ -32,7 +32,7 @@ export function DashboardPredictionProgress({
         </div>
 
         <Button asChild variant="outline" className="rounded-full bg-white">
-          <Link href="/predictions">Zobacz checklistę</Link>
+          <AppLink href="/predictions">Zobacz checklistę</AppLink>
         </Button>
       </div>
 

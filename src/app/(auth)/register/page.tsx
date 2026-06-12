@@ -7,8 +7,8 @@ export default function RegisterPage() {
       title="Zakładamy konto"
       description="Wymyśl nick, ustaw hasło i zaczynamy walkę o najbardziej prestiżową nagrodę sezonu."
       footerText="Masz już konto?"
-      footerLinkLabel="Zaloguj się"
-      footerLinkHref="/login"
+      footerAppLinkLabel="Zaloguj się"
+      footerAppLinkHref="/login"
     >
       <RegisterForm />
     </AuthPageShell>

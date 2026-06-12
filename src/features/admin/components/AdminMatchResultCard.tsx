@@ -1,4 +1,3 @@
-import Link from "next/link";
 import { CalendarDays, MapPin, Users } from "lucide-react";
 import { Badge } from "@/src/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -11,6 +10,7 @@ import {
 } from "@/src/features/matches/utils/match-formatters";
 import { AdminResultForm } from "@/src/features/admin/components/AdminResultForm";
 import { AdminMatchItem } from "@/src/features/admin/types/admin-match.types";
+import { AppLink } from "@/src/components/navigation/AppLink";
 
 type AdminMatchResultCardProps = {
   match: AdminMatchItem;
@@ -118,7 +118,7 @@ export function AdminMatchResultCard({ match }: AdminMatchResultCardProps) {
             variant="outline"
             className="mt-3 w-full rounded-full bg-white"
           >
-            <Link href={`/matches/${match.id}`}>Podejrzyj mecz</Link>
+            <AppLink href={`/matches/${match.id}`}>Podejrzyj mecz</AppLink>
           </Button>
         </div>
       </div>

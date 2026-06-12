@@ -7,8 +7,8 @@ export default function LoginPage() {
       title="Wbijaj z powrotem"
       description="Podaj nick i hasło. Ranking sam się nie wygra, a piwo samo się nie zdobędzie."
       footerText="Nie masz jeszcze konta?"
-      footerLinkLabel="Załóż konto"
-      footerLinkHref="/register"
+      footerAppLinkLabel="Załóż konto"
+      footerAppLinkHref="/register"
     >
       <LoginForm />
     </AuthPageShell>

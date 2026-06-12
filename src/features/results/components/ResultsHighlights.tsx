@@ -1,4 +1,3 @@
-import Link from "next/link";
 import { Brain, Flame, Trophy } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ResultMatchItem } from "@/src/features/results/types/result.types";
@@ -6,6 +5,7 @@ import {
   formatResultMatchName,
   getResultsHighlights,
 } from "@/src/features/results/utils/results-highlights";
+import { AppLink } from "@/src/components/navigation/AppLink";
 
 type ResultsHighlightsProps = {
   results: ResultMatchItem[];
@@ -29,7 +29,7 @@ function HighlightCard({
   match,
 }: HighlightCardProps) {
   return (
-    <div className="rounded-[2rem] bg-white p-5 shadow-sm">
+    <div className="flex h-full flex-col rounded-[2rem] bg-white p-5 shadow-sm">
       <div className="flex items-start justify-between gap-4">
         <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-primary/10 text-primary">
           <Icon className="h-5 w-5" />
@@ -55,13 +55,15 @@ function HighlightCard({
       </div>
 
       {match ? (
-        <Button
-          asChild
-          variant="outline"
-          className="mt-5 w-full rounded-full bg-white"
-        >
-          <Link href={`/matches/${match.id}`}>Zobacz mecz</Link>
-        </Button>
+        <div className="mt-auto pt-5">
+          <Button
+            asChild
+            variant="outline"
+            className="w-full rounded-full bg-white"
+          >
+            <AppLink href={`/matches/${match.id}`}>Zobacz mecz</AppLink>
+          </Button>
+        </div>
       ) : null}
     </div>
   );
