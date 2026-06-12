@@ -4,7 +4,7 @@ import {
   CalendarDays,
   ClipboardList,
   Target,
-  Trophy,
+  AlertTriangle,
 } from "lucide-react";
 import { Badge } from "@/src/components/ui/badge";
 import { Button } from "@/src/components/ui/button";
@@ -143,7 +143,7 @@ export default async function DashboardPage() {
         />
       </div>
 
-      <div className="mt-6 grid gap-6 lg:grid-cols-[1fr_2fr]">
+      <div className="mt-6 grid gap-6 lg:grid-cols-[1.45fr_1fr]">
         <NextMissingPredictionCard
           match={nextMissingMatch}
           todayMissingCount={todayMissingMatches.length}
@@ -165,10 +165,14 @@ export default async function DashboardPage() {
           />
 
           <DashboardStatCard
-            title="Punkty"
-            value={totalPoints}
-            description="Na razie matematyka. Później powód do chwalenia się albo ciszy."
-            icon={Trophy}
+            title="Dzisiaj bez typu"
+            value={todayMissingMatches.length}
+            description={
+              todayMissingMatches.length > 0
+                ? "Tyle dzisiejszych meczów nadal czeka na Twój typ. Czas na szybkie gaszenie pożaru."
+                : "Na dziś wszystko obstawione. Podejrzanie odpowiedzialne zachowanie."
+            }
+            icon={AlertTriangle}
           />
 
           <DashboardStatCard
