@@ -1,10 +1,9 @@
 "use client";
 
-import { useMemo } from "react";
 import Image from "next/image";
 import logo from "@/src/app/icon.png";
 
-const loadingTexts = [
+export const loadingTexts = [
   "Sprawdzamy typy ekspertów od kanapy...",
   "Liczymy punkty i wymówki...",
   "Rozgrzewamy VAR...",
@@ -12,11 +11,15 @@ const loadingTexts = [
   "Sprawdzamy, kto znowu uwierzył w underdoga...",
 ];
 
-export function AppLoader() {
-  const text = useMemo(() => {
-    return loadingTexts[Math.floor(Math.random() * loadingTexts.length)];
-  }, []);
+export function getRandomLoadingText() {
+  return loadingTexts[Math.floor(Math.random() * loadingTexts.length)];
+}
 
+type AppLoaderProps = {
+  text?: string;
+};
+
+export function AppLoader({ text = loadingTexts[0] }: AppLoaderProps) {
   return (
     <div className="fixed inset-0 z-9999 flex items-center justify-center bg-background/95 px-4 backdrop-blur-sm">
       <div className="w-full max-w-md overflow-hidden rounded-[2rem] bg-white p-5 shadow-xl">
@@ -27,7 +30,7 @@ export function AppLoader() {
 
               <div className="absolute inset-0 rounded-full border-4 border-background/15" />
 
-              <div className="absolute inset-0 animate-spin rounded-full border-4 border-transparent border-t-background border-r-background/70" />
+              <div className="absolute inset-0 animate-spin rounded-full border-4 border-transparent border-r-background/70 border-t-background" />
 
               <div className="relative flex h-20 w-20 items-center justify-center rounded-full bg-background shadow-sm">
                 <Image

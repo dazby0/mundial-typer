@@ -10,6 +10,18 @@ type AppLinkProps = LinkProps &
     children: React.ReactNode;
   };
 
+function getHrefValue(href: LinkProps["href"]) {
+  if (typeof href === "string") {
+    return href;
+  }
+
+  return href.pathname ?? "";
+}
+
+function getHrefPathname(hrefValue: string) {
+  return hrefValue.split("?")[0].split("#")[0];
+}
+
 export function AppLink({
   href,
   children,
@@ -20,14 +32,6 @@ export function AppLink({
   const pathname = usePathname();
   const { startLoading } = useNavigationLoading();
 
-  const getHrefValue = (hrefValue: LinkProps["href"]) => {
-    if (typeof hrefValue === "string") {
-      return hrefValue;
-    }
-
-    return hrefValue.pathname ?? "";
-  };
-
   const handleClick = (event: MouseEvent<HTMLAnchorElement>) => {
     onClick?.(event);
 
@@ -37,13 +41,14 @@ export function AppLink({
       return;
 
     const hrefValue = getHrefValue(href);
+    const hrefPathname = getHrefPathname(hrefValue);
 
-    if (!hrefValue) return;
-    if (hrefValue === pathname) return;
-    if (hrefValue.startsWith("#")) return;
-    if (hrefValue.startsWith("http")) return;
+    if (!hrefPathname) return;
+    if (hrefPathname === pathname) return;
+    if (hrefPathname.startsWith("#")) return;
+    if (hrefPathname.startsWith("http")) return;
 
-    startLoading();
+    startLoading(hrefPathname);
   };
 
   return (
