@@ -19,7 +19,7 @@ import {
 import { getTargetDateKey } from "@/src/features/matches/utils/match-filters";
 import { AdminTodayMatchesFloatingButton } from "@/src/features/admin/components/AdminTodayMatchesFloatingButton";
 import { Button } from "@/src/components/ui/button";
-import Link from "next/link";
+import { AppLink } from "@/src/components/navigation/AppLink";
 
 type AdminPageProps = {
   searchParams: Promise<{
@@ -105,10 +105,10 @@ export default async function AdminPage({ searchParams }: AdminPageProps) {
               variant="outline"
               className="rounded-full bg-white mt-3"
             >
-              <Link href="/admin/tournament-bonuses">
+              <AppLink href="/admin/tournament-bonuses">
                 <Trophy className="h-4 w-4" />
                 Rozlicz bonusy turniejowe
-              </Link>
+              </AppLink>
             </Button>
           </div>
 

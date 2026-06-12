@@ -1,4 +1,4 @@
-import { Beer, Crown, Medal, Trophy } from "lucide-react";
+import { Beer, Crown, Medal, Target, Trophy } from "lucide-react";
 import { RankingItem } from "@/src/features/ranking/types/ranking.types";
 import {
   getRankingBadgeDescription,
@@ -89,30 +89,11 @@ export function RankingPodium({ ranking }: RankingPodiumProps) {
                     : "mt-2 text-sm text-muted-foreground"
                 }
               >
-                {getRankingBadgeDescription(item, position)}
+                {getRankingBadgeDescription(item, position, "podium")}
               </p>
             </div>
 
             <div className="mt-6 grid grid-cols-2 gap-3">
-              <div
-                className={
-                  isLeader
-                    ? "rounded-2xl bg-background/10 px-4 py-3"
-                    : "rounded-2xl bg-background px-4 py-3"
-                }
-              >
-                <p
-                  className={
-                    isLeader
-                      ? "text-sm text-background/60"
-                      : "text-sm text-muted-foreground"
-                  }
-                >
-                  Punkty
-                </p>
-                <p className="font-heading text-4xl">{item.total_points}</p>
-              </div>
-
               <div
                 className={
                   isLeader
@@ -130,7 +111,31 @@ export function RankingPodium({ ranking }: RankingPodiumProps) {
                   <Beer className="h-4 w-4" />
                   Piwa
                 </div>
+
                 <p className="font-heading text-4xl">{item.total_points}</p>
+              </div>
+
+              <div
+                className={
+                  isLeader
+                    ? "rounded-2xl bg-background/10 px-4 py-3"
+                    : "rounded-2xl bg-background px-4 py-3"
+                }
+              >
+                <div
+                  className={
+                    isLeader
+                      ? "flex items-center gap-2 text-sm text-background/60"
+                      : "flex items-center gap-2 text-sm text-muted-foreground"
+                  }
+                >
+                  <Target className="h-4 w-4" />
+                  Idealne strzały
+                </div>
+
+                <p className="font-heading text-4xl">
+                  {item.exact_scores_count}
+                </p>
               </div>
             </div>
           </div>

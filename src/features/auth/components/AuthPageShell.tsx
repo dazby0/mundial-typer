@@ -1,12 +1,12 @@
-import Link from "next/link";
+import { AppLink } from "@/src/components/navigation/AppLink";
 import { Beer, Trophy } from "lucide-react";
 
 type AuthPageShellProps = {
   title: string;
   description: string;
   footerText: string;
-  footerLinkLabel: string;
-  footerLinkHref: string;
+  footerAppLinkLabel: string;
+  footerAppLinkHref: string;
   children: React.ReactNode;
 };
 
@@ -14,8 +14,8 @@ export function AuthPageShell({
   title,
   description,
   footerText,
-  footerLinkLabel,
-  footerLinkHref,
+  footerAppLinkLabel,
+  footerAppLinkHref,
   children,
 }: AuthPageShellProps) {
   return (
@@ -54,9 +54,12 @@ export function AuthPageShell({
 
         <div className="relative z-10 rounded-[2rem] border bg-white p-6 shadow-2xl shadow-black/10 sm:p-8">
           <div className="mb-8">
-            <Link href="/" className="mb-6 inline-block text-sm text-primary">
+            <AppLink
+              href="/"
+              className="mb-6 inline-block text-sm text-primary"
+            >
               ← Powrót na stronę główną
-            </Link>
+            </AppLink>
 
             <h2 className="text-4xl font-black uppercase tracking-tight">
               {title}
@@ -70,9 +73,12 @@ export function AuthPageShell({
 
           <p className="mt-6 text-center text-sm text-muted-foreground">
             {footerText}{" "}
-            <Link href={footerLinkHref} className="font-medium text-primary">
-              {footerLinkLabel}
-            </Link>
+            <AppLink
+              href={footerAppLinkHref}
+              className="font-medium text-primary"
+            >
+              {footerAppLinkLabel}
+            </AppLink>
           </p>
         </div>
       </section>

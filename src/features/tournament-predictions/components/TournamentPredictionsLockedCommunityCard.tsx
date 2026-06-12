@@ -14,9 +14,9 @@ export function TournamentPredictionsLockedCommunityCard() {
           </p>
 
           <p className="mt-2 max-w-3xl text-sm text-background/70">
-            Do startu Mundialu każdy widzi tylko swoje proroctwa. Po pierwszym
-            gwizdku odpalamy publiczny teatr decyzji: mistrzowie, finaliści,
-            królowie strzelców i typy, których ktoś będzie się wypierał.
+            Oficjalnie typy turniejowe powinny już być zamknięte, ale dla tych,
+            którzy przespali start, zgubili kalendarz albo po prostu są
+            nieogarnięci, admin przedłużył typowanie do końca dnia.
           </p>
         </div>
       </div>

@@ -9,6 +9,8 @@ import {
   TournamentPrediction,
   TournamentTeamOption,
 } from "@/src/features/tournament-predictions/types/tournament-prediction.types";
+import { TournamentPredictionSummary } from "./TournamentPredictionSummary";
+import { Badge } from "@/src/components/ui/badge";
 
 type TournamentPredictionFormProps = {
   teams: TournamentTeamOption[];
@@ -21,10 +23,35 @@ export function TournamentPredictionForm({
   initialPrediction,
   isLocked,
 }: TournamentPredictionFormProps) {
-  const { values, error, isSaving, updateValue, handleSubmit } =
+  const { values, error, isSaving, isDirty, updateValue, handleSubmit } =
     useTournamentPredictionForm({
       initialPrediction,
     });
+
+  if (isLocked && initialPrediction) {
+    return (
+      <TournamentPredictionSummary
+        prediction={initialPrediction}
+        teams={teams}
+      />
+    );
+  }
+
+  if (isLocked && !initialPrediction) {
+    return (
+      <div className="rounded-[2rem] bg-white p-6 shadow-sm">
+        <Badge className="mb-4 rounded-full">Typy zablokowane</Badge>
+
+        <h2 className="text-3xl font-black">Brak typów turniejowych</h2>
+
+        <p className="mt-2 text-sm text-muted-foreground">
+          Mundial wystartował, więc formularz jest już zamknięty. Tym razem
+          proroctwa nie zostały zapisane — komisja piwna przyjęła to z
+          mieszanymi uczuciami.
+        </p>
+      </div>
+    );
+  }
 
   return (
     <form
@@ -168,11 +195,15 @@ export function TournamentPredictionForm({
 
       <Button
         type="submit"
-        disabled={isSaving || isLocked}
-        className="mt-8 h-12 w-full rounded-full"
+        disabled={isSaving || isLocked || !isDirty}
+        className="mt-8 h-12 w-full rounded-full disabled:cursor-not-allowed disabled:opacity-50"
       >
         <Save className="h-4 w-4" />
-        {isSaving ? "Zapisywanie..." : "Zapisz typy turniejowe"}
+        {isSaving
+          ? "Zapisywanie..."
+          : isDirty
+            ? "Zapisz typy turniejowe"
+            : "Brak zmian do zapisania"}
       </Button>
     </form>
   );

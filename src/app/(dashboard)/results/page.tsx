@@ -1,4 +1,3 @@
-import Link from "next/link";
 import { redirect } from "next/navigation";
 import { Beer, ClipboardList, Trophy, XCircle } from "lucide-react";
 import { Badge } from "@/src/components/ui/badge";
@@ -7,6 +6,7 @@ import { createClient } from "@/src/lib/supabase/server";
 import { ResultMatchCard } from "@/src/features/results/components/ResultMatchCard";
 import { ResultMatchItem } from "@/src/features/results/types/result.types";
 import { ResultsHighlights } from "@/src/features/results/components/ResultsHighlights";
+import { AppLink } from "@/src/components/navigation/AppLink";
 
 export default async function ResultsPage() {
   const supabase = await createClient();
@@ -173,16 +173,16 @@ export default async function ResultsPage() {
 
           <div className="mt-6 flex flex-col justify-center gap-3 sm:flex-row">
             <Button asChild className="rounded-full">
-              <Link href="/matches">Idź do terminarza</Link>
+              <AppLink href="/matches">Idź do terminarza</AppLink>
             </Button>
 
             <Button asChild variant="outline" className="rounded-full bg-white">
-              <Link href="/ranking">Sprawdź ranking zer</Link>
+              <AppLink href="/ranking">Sprawdź ranking zer</AppLink>
             </Button>
           </div>
         </div>
       ) : (
-        <div className="mt-6 space-y-4">
+        <div className="mt-6 grid items-start gap-5 lg:grid-cols-2">
           {results.map((match) => (
             <ResultMatchCard key={match.id} match={match} />
           ))}

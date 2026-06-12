@@ -1,4 +1,3 @@
-import Link from "next/link";
 import { redirect } from "next/navigation";
 import { ArrowLeft } from "lucide-react";
 import { Badge } from "@/src/components/ui/badge";
@@ -10,6 +9,7 @@ import {
   TournamentBonusResult,
   TournamentTeamOption,
 } from "@/src/features/tournament-predictions/types/tournament-prediction.types";
+import { AppLink } from "@/src/components/navigation/AppLink";
 
 export default async function AdminTournamentBonusesPage() {
   const supabase = await createClient();
@@ -70,10 +70,10 @@ export default async function AdminTournamentBonusesPage() {
           variant="outline"
           className="mb-5 rounded-full bg-white"
         >
-          <Link href="/admin">
+          <AppLink href="/admin">
             <ArrowLeft className="h-4 w-4" />
             Wróć do panelu admina
-          </Link>
+          </AppLink>
         </Button>
 
         <Badge className="mb-4 rounded-full">Admin • typy turniejowe</Badge>

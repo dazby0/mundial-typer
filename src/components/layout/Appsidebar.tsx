@@ -1,6 +1,5 @@
 "use client";
 
-import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
   Beer,
@@ -15,6 +14,9 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { LogoutButton } from "@/src/features/auth/components/LogoutButton";
+import Image from "next/image";
+import logo from "@/src/app/icon.png";
+import { AppLink } from "../navigation/AppLink";
 
 type AppSidebarProps = {
   username: string;
@@ -66,16 +68,14 @@ export function AppSidebar({ username, role }: AppSidebarProps) {
 
   return (
     <aside className="sticky top-0 hidden h-screen w-72 shrink-0 border-r bg-white p-5 lg:flex lg:flex-col">
-      <Link href="/dashboard" className="flex items-center gap-3">
-        <div className="flex h-12 w-12 items-center justify-center rounded-2xl text-background">
-          <Trophy className="h-8 w-8 text-amber-400" />
-        </div>
+      <AppLink href="/dashboard" className="flex items-center gap-3">
+        <Image src={logo} alt="Mundial Typer" width={48} height={48} />
 
         <div>
           <p className="font-heading text-xl leading-none">Mundial Typer</p>
           <p className="text-xs text-muted-foreground">Liga piwna 2026</p>
         </div>
-      </Link>
+      </AppLink>
 
       <div className="mt-8 rounded-3xl bg-background p-4">
         <div className="flex items-center gap-3">
@@ -98,7 +98,7 @@ export function AppSidebar({ username, role }: AppSidebarProps) {
           const isActive = pathname === item.href;
 
           return (
-            <Link
+            <AppLink
               key={item.href}
               href={item.href}
               className={cn(
@@ -110,12 +110,12 @@ export function AppSidebar({ username, role }: AppSidebarProps) {
             >
               <Icon className="h-4 w-4" />
               {item.label}
-            </Link>
+            </AppLink>
           );
         })}
 
         {role === "admin" ? (
-          <Link
+          <AppLink
             href="/admin"
             className={cn(
               "flex items-center gap-3 rounded-2xl px-4 py-3 text-sm font-medium transition",
@@ -126,7 +126,7 @@ export function AppSidebar({ username, role }: AppSidebarProps) {
           >
             <Shield className="h-4 w-4" />
             Panel admina
-          </Link>
+          </AppLink>
         ) : null}
       </nav>
 

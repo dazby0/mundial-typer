@@ -1,4 +1,3 @@
-import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 import { ArrowLeft, MapPin } from "lucide-react";
 import { Badge } from "@/src/components/ui/badge";
@@ -24,6 +23,7 @@ import { PredictionsList } from "@/src/features/predictions/components/Predictio
 import { PredictionForm } from "@/src/features/predictions/components/PredicitionForm";
 import { TeamFlag } from "@/src/features/teams/components/TeamFlag";
 import { MatchPredictionStats } from "@/src/features/predictions/components/MatchPredictionStats";
+import { AppLink } from "@/src/components/navigation/AppLink";
 
 type MatchDetailsPageProps = {
   params: Promise<{
@@ -93,10 +93,10 @@ export default async function MatchDetailsPage({
   return (
     <section className="mx-auto max-w-6xl">
       <Button asChild variant="ghost" className="mb-5 rounded-full">
-        <Link href="/matches">
+        <AppLink href="/matches">
           <ArrowLeft className="h-4 w-4" />
           Wróć do meczów
-        </Link>
+        </AppLink>
       </Button>
 
       <div className="space-y-6">

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Archivo_Black, Inter } from "next/font/google";
 import "./globals.css";
+import { NavigationLoadingProvider } from "../components/navigation/NavigationLoadingProvider";
 
 const archivoBlack = Archivo_Black({
   subsets: ["latin-ext"],
@@ -16,6 +17,9 @@ const inter = Inter({
 export const metadata: Metadata = {
   title: "Mundial Typer",
   description: "Liga typerów na Mundial 2026",
+  icons: {
+    icon: "./icon.png",
+  },
 };
 
 export default function RootLayout({
@@ -25,7 +29,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="pl" className={`${archivoBlack.variable} ${inter.variable}`}>
-      <body>{children}</body>
+      <body>
+        <NavigationLoadingProvider>{children}</NavigationLoadingProvider>
+      </body>
     </html>
   );
 }

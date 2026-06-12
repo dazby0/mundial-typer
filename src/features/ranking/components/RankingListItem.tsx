@@ -1,4 +1,12 @@
-import { Beer, Medal, Target, Trophy, XCircle } from "lucide-react";
+import {
+  BadgeCheck,
+  CheckCircle2,
+  ClipboardList,
+  Medal,
+  Target,
+  Trophy,
+  XCircle,
+} from "lucide-react";
 import { Badge } from "@/src/components/ui/badge";
 import { RankingItem } from "@/src/features/ranking/types/ranking.types";
 import {
@@ -11,6 +19,7 @@ type RankingListItemProps = {
   item: RankingItem;
   position: number;
   leader: RankingItem | null;
+  totalPlayers: number;
 };
 
 function getPositionIcon(position: number) {
@@ -25,9 +34,12 @@ export function RankingListItem({
   item,
   position,
   leader,
+  totalPlayers,
 }: RankingListItemProps) {
   const isPodium = position <= 3;
   const pointsToLeader = getPointsToLeader(item, leader);
+  const successfulPredictionsCount =
+    item.correct_results_count + item.exact_scores_count;
 
   return (
     <div className="rounded-[2rem] bg-white p-5 shadow-sm">
@@ -48,7 +60,7 @@ export function RankingListItem({
               <h2 className="truncate text-2xl font-black">{item.username}</h2>
 
               <Badge variant="secondary" className="rounded-full">
-                {getRankingTitle(item, position)}
+                {getRankingTitle(item, position, totalPlayers)}
               </Badge>
 
               {item.role === "admin" ? (
@@ -66,7 +78,7 @@ export function RankingListItem({
 
               {pointsToLeader > 0 ? (
                 <span className="rounded-full bg-background px-3 py-1">
-                  brakuje {pointsToLeader} piw do lidera
+                  brakuje {pointsToLeader} pkt do lidera
                 </span>
               ) : (
                 <span className="rounded-full bg-primary/10 px-3 py-1 text-primary">
@@ -77,7 +89,7 @@ export function RankingListItem({
           </div>
         </div>
 
-        <div className="grid gap-3 grid-cols-3 lg:min-w-155 lg:grid-cols-5">
+        <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:min-w-155 lg:grid-cols-5">
           <div className="rounded-2xl bg-background px-4 py-3">
             <div className="flex items-center gap-2 text-sm text-muted-foreground">
               <Trophy className="h-4 w-4" />
@@ -88,21 +100,31 @@ export function RankingListItem({
 
           <div className="rounded-2xl bg-background px-4 py-3">
             <div className="flex items-center gap-2 text-sm text-muted-foreground">
-              <Beer className="h-4 w-4" />
-              Piwa
+              <ClipboardList className="h-4 w-4" />
+              Typy
             </div>
-            <p className="mt-1 font-heading text-3xl">{item.total_points}</p>
-          </div>
 
-          <div className="rounded-2xl bg-background px-4 py-3">
-            <p className="text-sm text-muted-foreground">Typy</p>
             <p className="mt-1 font-heading text-3xl">
               {item.predictions_count}
             </p>
           </div>
 
           <div className="rounded-2xl bg-background px-4 py-3">
-            <p className="text-sm text-muted-foreground">Idealne</p>
+            <div className="flex items-center gap-2 text-sm text-muted-foreground">
+              <CheckCircle2 className="h-4 w-4" />
+              Trafione
+            </div>
+            <p className="mt-1 font-heading text-3xl">
+              {successfulPredictionsCount}
+            </p>
+          </div>
+
+          <div className="rounded-2xl bg-background px-4 py-3">
+            <div className="flex items-center gap-2 text-sm text-muted-foreground">
+              <BadgeCheck className="h-4 w-4" />
+              Idealne
+            </div>
+
             <p className="mt-1 font-heading text-3xl">
               {item.exact_scores_count}
             </p>

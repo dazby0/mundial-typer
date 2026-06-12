@@ -8,7 +8,6 @@ import {
   TournamentPredictionPayload,
 } from "@/src/features/tournament-predictions/types/tournament-prediction.types";
 import { tournamentBonusResultSchema } from "@/src/features/tournament-predictions/schemas/tournament-prediction.schema";
-import { saveTournamentBonusResults } from "@/src/features/tournament-predictions/services/tournament-bonus-results-api";
 
 type UseTournamentBonusResultsFormParams = {
   initialResult: Partial<TournamentBonusResult> | null;
@@ -66,11 +65,27 @@ export function useTournamentBonusResultsForm({
     try {
       setIsSaving(true);
 
-      const response = await saveTournamentBonusResults(parsed.data);
+      const response = await fetch("/api/admin/tournament-bonus-results", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(parsed.data),
+      });
+
+      const result = await response.json();
+
+      if (!response.ok) {
+        throw new Error(
+          result.message || "Nie udało się zapisać rozstrzygnięć.",
+        );
+      }
 
       if (isFinalized) {
         toast.success(
-          `Bonusy rozliczone. Przeliczono ${response.predictions_count || 0} typów.`,
+          `Bonusy rozliczone. Przeliczono ${
+            result.predictions_count || 0
+          } typów.`,
         );
       } else {
         toast.success("Rozstrzygnięcia zapisane jako draft.");

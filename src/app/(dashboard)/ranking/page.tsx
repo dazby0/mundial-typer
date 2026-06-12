@@ -1,6 +1,5 @@
-import Link from "next/link";
 import { redirect } from "next/navigation";
-import { Beer, Crown, Trophy } from "lucide-react";
+import { ClipboardList, Crown, Trophy } from "lucide-react";
 import { Badge } from "@/src/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { createClient } from "@/src/lib/supabase/server";
@@ -8,6 +7,7 @@ import { RankingListItem } from "@/src/features/ranking/components/RankingListIt
 import { RankingPodium } from "@/src/features/ranking/components/RankingPodium";
 import { RankingHighlights } from "@/src/features/ranking/components/RankingHighlights";
 import { RankingItem } from "@/src/features/ranking/types/ranking.types";
+import { AppLink } from "@/src/components/navigation/AppLink";
 
 export default async function RankingPage() {
   const supabase = await createClient();
@@ -85,7 +85,7 @@ export default async function RankingPage() {
                 <div>
                   <p className="font-heading text-2xl">{totalPoints}</p>
                   <p className="text-xs text-muted-foreground">
-                    punktów łącznie
+                    punkty całej ligi
                   </p>
                 </div>
               </div>
@@ -94,15 +94,13 @@ export default async function RankingPage() {
             <div className="rounded-3xl bg-background px-5 py-4">
               <div className="flex items-center gap-3">
                 <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-primary/10 text-primary">
-                  <Beer className="h-5 w-5" />
+                  <ClipboardList className="h-5 w-5" />
                 </div>
 
                 <div>
-                  <p className="font-heading text-2xl">
-                    {leader?.total_points || 0}
-                  </p>
+                  <p className="font-heading text-2xl">{totalPredictions}</p>
                   <p className="text-xs text-muted-foreground">
-                    piw dla lidera
+                    zapisanych typów
                   </p>
                 </div>
               </div>
@@ -121,7 +119,7 @@ export default async function RankingPage() {
           </p>
 
           <Button asChild className="mt-6 rounded-full">
-            <Link href="/matches">Idź obstawiać</Link>
+            <AppLink href="/matches">Idź obstawiać</AppLink>
           </Button>
         </div>
       ) : (
@@ -164,7 +162,7 @@ export default async function RankingPage() {
                 variant="outline"
                 className="rounded-full bg-white"
               >
-                <Link href="/predictions">Sprawdź swoje typy</Link>
+                <AppLink href="/predictions">Sprawdź swoje typy</AppLink>
               </Button>
             </div>
           </div>
@@ -175,6 +173,7 @@ export default async function RankingPage() {
               item={item}
               position={index + 1}
               leader={leader}
+              totalPlayers={ranking.length}
             />
           ))}
         </div>

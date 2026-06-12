@@ -1,7 +1,7 @@
-import Link from "next/link";
 import { Trophy, XCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { MyMatchPrediction } from "@/src/features/matches/types/match.types";
+import { AppLink } from "@/src/components/navigation/AppLink";
 
 type RecentSettledPredictionsProps = {
   predictions: MyMatchPrediction[];
@@ -34,7 +34,7 @@ export function RecentSettledPredictions({
         </div>
 
         <Button asChild variant="outline" className="rounded-full bg-white">
-          <Link href="/results">Wyniki</Link>
+          <AppLink href="/results">Wyniki</AppLink>
         </Button>
       </div>
 
