@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
   Menu,
@@ -18,6 +17,9 @@ import {
 import { cn } from "@/lib/utils";
 import { LogoutButton } from "@/src/features/auth/components/LogoutButton";
 import { Sheet, SheetContent } from "@/components/ui/sheet";
+import Image from "next/image";
+import logo from "@/src/app/icon.png";
+import { AppLink } from "../navigation/AppLink";
 
 type MobileHeaderProps = {
   username: string;
@@ -75,16 +77,14 @@ export function MobileHeader({ username, role }: MobileHeaderProps) {
     <>
       <header className="sticky top-0 z-30 border-b bg-white/90 px-4 py-3 backdrop-blur lg:hidden">
         <div className="flex items-center justify-between gap-4">
-          <Link href="/dashboard" className="flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-2xl text-background">
-              <Trophy className="h-8 w-8 text-amber-400" />
-            </div>
+          <AppLink href="/dashboard" className="flex items-center gap-3">
+            <Image src={logo} alt="Mundial Typer" width={48} height={48} />
 
             <div>
               <p className="font-heading text-lg leading-none">Mundial Typer</p>
               <p className="text-xs text-muted-foreground">{username}</p>
             </div>
-          </Link>
+          </AppLink>
 
           <button
             onClick={() => setIsOpen(true)}
@@ -119,7 +119,7 @@ export function MobileHeader({ username, role }: MobileHeaderProps) {
                 const isActive = pathname === item.href;
 
                 return (
-                  <Link
+                  <AppLink
                     key={item.href}
                     href={item.href}
                     onClick={handleNavClick}
@@ -132,12 +132,12 @@ export function MobileHeader({ username, role }: MobileHeaderProps) {
                   >
                     <Icon className="h-4 w-4" />
                     {item.label}
-                  </Link>
+                  </AppLink>
                 );
               })}
 
               {role === "admin" ? (
-                <Link
+                <AppLink
                   href="/admin"
                   onClick={handleNavClick}
                   className={cn(
@@ -149,7 +149,7 @@ export function MobileHeader({ username, role }: MobileHeaderProps) {
                 >
                   <Shield className="h-4 w-4" />
                   Panel admina
-                </Link>
+                </AppLink>
               ) : null}
             </nav>
 

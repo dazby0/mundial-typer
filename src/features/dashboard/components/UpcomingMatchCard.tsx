@@ -1,4 +1,3 @@
-import Link from "next/link";
 import { Clock } from "lucide-react";
 import { Button } from "@/src/components/ui/button";
 import { TeamFlag } from "@/src/features/teams/components/TeamFlag";
@@ -11,6 +10,7 @@ import {
   formatMatchDate,
   formatMatchTime,
 } from "@/src/features/matches/utils/match-formatters";
+import { AppLink } from "@/src/components/navigation/AppLink";
 
 type UpcomingMatchCardProps = {
   match: MatchListItem;
@@ -37,30 +37,34 @@ export function UpcomingMatchCard({
             </span>
           </div>
 
-          <div className="mt-4 grid gap-4 sm:grid-cols-[1fr_auto_1fr] sm:items-center">
-            <div className="flex items-center gap-3">
+          <div className="mt-4 grid gap-2 sm:gap-4 grid-cols-[1fr_auto_1fr] items-center">
+            <div className="flex items-center gap-2 sm:gap-3">
               <TeamFlag
                 name={match.home_team_name_pl}
                 flagCode={match.home_team_flag_code}
                 flagEmoji={match.home_team_flag_emoji}
-                className="h-11 w-11"
+                className="h-9 w-9 sm:h-11 sm:w-11"
               />
 
               <div className="min-w-0">
-                <p className="truncate font-black">{match.home_team_name_pl}</p>
+                <p className="truncate font-black text-sm sm:text-base">
+                  {match.home_team_name_pl}
+                </p>
                 <p className="text-xs text-muted-foreground">
                   {match.home_team_code}
                 </p>
               </div>
             </div>
 
-            <div className="text-center font-heading text-2xl text-muted-foreground">
+            <div className="text-center font-heading text-lg sm:text-2xl text-muted-foreground">
               VS
             </div>
 
-            <div className="flex items-center gap-3 sm:justify-end">
+            <div className="flex items-center gap-2 sm:gap-3 justify-end">
               <div className="min-w-0 sm:text-right">
-                <p className="truncate font-black">{match.away_team_name_pl}</p>
+                <p className="truncate font-black text-sm sm:text-base">
+                  {match.away_team_name_pl}
+                </p>
                 <p className="text-xs text-muted-foreground">
                   {match.away_team_code}
                 </p>
@@ -70,7 +74,7 @@ export function UpcomingMatchCard({
                 name={match.away_team_name_pl}
                 flagCode={match.away_team_flag_code}
                 flagEmoji={match.away_team_flag_emoji}
-                className="h-11 w-11"
+                className="h-9 w-9 sm:h-11 sm:w-11"
               />
             </div>
           </div>
@@ -83,9 +87,9 @@ export function UpcomingMatchCard({
         </div>
 
         <Button asChild className="rounded-full">
-          <Link href={`/matches/${match.id}`}>
+          <AppLink href={`/matches/${match.id}`}>
             {prediction ? "Podejrzyj typ" : "Obstaw teraz"}
-          </Link>
+          </AppLink>
         </Button>
       </div>
     </div>

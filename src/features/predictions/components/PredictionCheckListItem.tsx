@@ -1,4 +1,3 @@
-import Link from "next/link";
 import { Lock, Pencil, Plus, Trophy } from "lucide-react";
 import { Badge } from "@/src/components/ui/badge";
 import { Button } from "@/src/components/ui/button";
@@ -13,6 +12,7 @@ import {
   formatGroupName,
 } from "@/src/features/matches/utils/match-formatters";
 import { isMatchUrgent } from "../utils/prediction-checklist";
+import { AppLink } from "@/src/components/navigation/AppLink";
 
 type PredictionChecklistItemProps = {
   match: MatchListItem;
@@ -55,82 +55,99 @@ export function PredictionChecklistItem({
 
   return (
     <div className="rounded-3xl bg-white p-5 shadow-sm">
-      <div className="flex flex-col gap-5 lg:flex-row lg:items-center lg:justify-between">
-        <div className="min-w-0 flex-1">
-          <div className="flex flex-wrap items-center gap-2">
-            <Badge variant="secondary" className="rounded-full">
-              {formatGroupName(match.group_name)}
-            </Badge>
-
-            <Badge variant="outline" className="rounded-full bg-white">
-              Mecz #{match.match_number}
-            </Badge>
-
-            {isFinished ? (
-              <Badge className="rounded-full">Rozliczone</Badge>
-            ) : matchStarted ? (
+      <div className="flex flex-col gap-5">
+        <div className="min-w-0">
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+            <div className="flex flex-wrap items-center gap-2">
               <Badge variant="secondary" className="rounded-full">
-                Zamknięte
+                {formatGroupName(match.group_name)}
               </Badge>
-            ) : prediction ? (
-              <Badge className="rounded-full">Typ zatwierdzony</Badge>
-            ) : (
-              <Badge variant="destructive" className="rounded-full">
-                Nie typowano
-              </Badge>
-            )}
 
-            {isUrgent ? (
-              <Badge variant="destructive" className="rounded-full">
-                Pilne — zaraz zamykamy bramkę
+              <Badge variant="outline" className="rounded-full bg-white">
+                Mecz #{match.match_number}
               </Badge>
-            ) : null}
+
+              {isFinished ? (
+                <Badge className="rounded-full">Rozliczone</Badge>
+              ) : matchStarted ? (
+                <Badge variant="secondary" className="rounded-full">
+                  Zamknięte
+                </Badge>
+              ) : prediction ? (
+                <Badge className="rounded-full">Typ zatwierdzony</Badge>
+              ) : (
+                <Badge variant="destructive" className="rounded-full">
+                  Nie typowano
+                </Badge>
+              )}
+
+              {isUrgent ? (
+                <Badge variant="destructive" className="rounded-full">
+                  Pilne — zaraz zamykamy bramkę
+                </Badge>
+              ) : null}
+            </div>
+
+            <Button
+              asChild
+              size="sm"
+              className="w-full shrink-0 rounded-full sm:w-auto"
+            >
+              <AppLink href={`/matches/${match.id}`}>
+                {getActionIcon(matchStarted, prediction)}
+                {getActionLabel(matchStarted, prediction)}
+              </AppLink>
+            </Button>
           </div>
 
-          <div className="mt-4 grid gap-4 md:grid-cols-[1fr_auto_1fr] md:items-center">
-            <div className="flex items-center gap-3">
+          <div className="mt-4 grid grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-center gap-2 sm:gap-4">
+            <div className="flex min-w-0 items-center gap-2 sm:gap-3">
               <TeamFlag
                 name={match.home_team_name_pl}
                 flagCode={match.home_team_flag_code}
                 flagEmoji={match.home_team_flag_emoji}
-                className="h-11 w-11"
+                className="h-8 w-8 shrink-0 sm:h-11 sm:w-11"
               />
 
               <div className="min-w-0">
-                <p className="truncate font-bold">{match.home_team_name_pl}</p>
-                <p className="text-xs text-muted-foreground">
+                <p className="truncate text-xs font-bold sm:text-base">
+                  {match.home_team_name_pl}
+                </p>
+                <p className="text-[10px] text-muted-foreground sm:text-xs">
                   {match.home_team_code}
                 </p>
               </div>
             </div>
 
-            <div className="flex items-center justify-center rounded-2xl bg-background px-5 py-3">
+            <div className="flex items-center justify-center rounded-xl bg-background px-3 py-2 sm:rounded-2xl sm:px-5 sm:py-3">
               {prediction ? (
                 <div className="text-center">
-                  <p className="text-xs uppercase tracking-[0.18em] text-muted-foreground">
+                  <p className="text-[9px] uppercase tracking-[0.14em] text-muted-foreground sm:text-xs sm:tracking-[0.18em]">
                     Twój typ
                   </p>
-                  <p className="font-heading text-3xl">
+                  <p className="font-heading text-2xl sm:text-3xl">
                     {prediction.predicted_home_score}:
                     {prediction.predicted_away_score}
                   </p>
                 </div>
               ) : (
                 <div className="text-center">
-                  <p className="text-xs uppercase tracking-[0.18em] text-muted-foreground">
+                  <p className="text-[9px] uppercase tracking-[0.14em] text-muted-foreground sm:text-xs sm:tracking-[0.18em]">
                     Twój typ
                   </p>
-                  <p className="font-heading text-3xl text-muted-foreground">
+                  <p className="font-heading text-2xl text-muted-foreground sm:text-3xl">
                     -:-
                   </p>
                 </div>
               )}
             </div>
 
-            <div className="flex items-center gap-3 md:justify-end">
-              <div className="min-w-0 md:text-right">
-                <p className="truncate font-bold">{match.away_team_name_pl}</p>
-                <p className="text-xs text-muted-foreground">
+            <div className="flex min-w-0 items-center justify-end gap-2 sm:gap-3">
+              <div className="min-w-0 text-right">
+                <p className="truncate text-xs font-bold sm:text-base">
+                  {match.away_team_name_pl}
+                </p>
+                <p className="text-[10px] text-muted-foreground sm:text-xs">
                   {match.away_team_code}
                 </p>
               </div>
@@ -139,7 +156,7 @@ export function PredictionChecklistItem({
                 name={match.away_team_name_pl}
                 flagCode={match.away_team_flag_code}
                 flagEmoji={match.away_team_flag_emoji}
-                className="h-11 w-11"
+                className="h-8 w-8 shrink-0 sm:h-11 sm:w-11"
               />
             </div>
           </div>
@@ -168,13 +185,6 @@ export function PredictionChecklistItem({
             ) : null}
           </div>
         </div>
-
-        <Button asChild className="rounded-full lg:w-auto">
-          <Link href={`/matches/${match.id}`}>
-            {getActionIcon(matchStarted, prediction)}
-            {getActionLabel(matchStarted, prediction)}
-          </Link>
-        </Button>
       </div>
     </div>
   );

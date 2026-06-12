@@ -1,4 +1,3 @@
-import Link from "next/link";
 import { CalendarDays } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { TeamFlag } from "@/src/features/teams/components/TeamFlag";
@@ -7,6 +6,7 @@ import {
   formatMatchDate,
   formatMatchTime,
 } from "@/src/features/matches/utils/match-formatters";
+import { AppLink } from "@/src/components/navigation/AppLink";
 
 type GroupMatchRowProps = {
   match: GroupMatchItem;
@@ -17,33 +17,37 @@ export function GroupMatchRow({ match }: GroupMatchRowProps) {
 
   return (
     <div className="rounded-2xl bg-background p-4">
-      <div className="grid gap-4 md:grid-cols-[1fr_auto_1fr_auto] md:items-center">
-        <div className="flex items-center gap-3">
+      <div className="grid grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-center gap-2 md:grid-cols-[1fr_auto_1fr_auto] md:gap-4">
+        <div className="flex min-w-0 items-center gap-2 md:gap-3">
           <TeamFlag
             name={match.home_team_name_pl}
             flagCode={match.home_team_flag_code}
             flagEmoji={match.home_team_flag_emoji}
-            className="h-9 w-9 bg-white"
+            className="h-7 w-7 shrink-0 bg-white md:h-9 md:w-9"
           />
 
           <div className="min-w-0">
-            <p className="truncate font-bold">{match.home_team_name_pl}</p>
-            <p className="text-xs text-muted-foreground">
+            <p className="truncate text-xs font-bold sm:text-sm md:text-base">
+              {match.home_team_name_pl}
+            </p>
+            <p className="text-[10px] text-muted-foreground md:text-xs">
               {match.home_team_code}
             </p>
           </div>
         </div>
 
-        <div className="rounded-2xl bg-white px-5 py-3 text-center">
-          <p className="font-heading text-2xl">
+        <div className="rounded-xl bg-white px-3 py-2 text-center md:rounded-2xl md:px-5 md:py-3">
+          <p className="font-heading text-lg md:text-2xl">
             {hasResult ? `${match.home_score}:${match.away_score}` : "VS"}
           </p>
         </div>
 
-        <div className="flex items-center gap-3 md:justify-end">
-          <div className="min-w-0 md:text-right">
-            <p className="truncate font-bold">{match.away_team_name_pl}</p>
-            <p className="text-xs text-muted-foreground">
+        <div className="flex min-w-0 items-center justify-end gap-2 md:gap-3">
+          <div className="min-w-0 text-right">
+            <p className="truncate text-xs font-bold sm:text-sm md:text-base">
+              {match.away_team_name_pl}
+            </p>
+            <p className="text-[10px] text-muted-foreground md:text-xs">
               {match.away_team_code}
             </p>
           </div>
@@ -52,12 +56,16 @@ export function GroupMatchRow({ match }: GroupMatchRowProps) {
             name={match.away_team_name_pl}
             flagCode={match.away_team_flag_code}
             flagEmoji={match.away_team_flag_emoji}
-            className="h-9 w-9 bg-white"
+            className="h-7 w-7 shrink-0 bg-white md:h-9 md:w-9"
           />
         </div>
 
-        <Button asChild variant="outline" className="rounded-full bg-white">
-          <Link href={`/matches/${match.id}`}>Mecz</Link>
+        <Button
+          asChild
+          variant="outline"
+          className="col-span-3 mt-2 rounded-full bg-white md:col-span-1 md:mt-0"
+        >
+          <AppLink href={`/matches/${match.id}`}>Mecz</AppLink>
         </Button>
       </div>
 

@@ -42,13 +42,17 @@ export default async function TournamentPredictionsPage() {
     throw new Error("Could not load tournament prediction.");
   }
 
-  const { data: isLocked, error: lockedError } = await supabase.rpc(
+  const { data: isTournamentStarted, error: lockedError } = await supabase.rpc(
     "is_tournament_started",
   );
 
   if (lockedError) {
     throw new Error("Could not verify tournament status.");
   }
+
+  const unlockUntil = new Date("2026-06-13T00:00:00+02:00");
+
+  const isLocked = Boolean(isTournamentStarted) && new Date() >= unlockUntil;
 
   const { data: publicPredictionsData, error: publicPredictionsError } =
     Boolean(isLocked)

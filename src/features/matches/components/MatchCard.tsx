@@ -1,4 +1,3 @@
-import Link from "next/link";
 import { MapPin } from "lucide-react";
 import { MatchListItem, MyMatchPrediction } from "../types/match.types";
 import { Card, CardContent, CardHeader } from "@/src/components/ui/card";
@@ -16,6 +15,7 @@ import {
   isMatchToday,
   isStartingSoon,
 } from "../utils/match-filters";
+import { AppLink } from "@/src/components/navigation/AppLink";
 
 type MatchCardProps = {
   match: MatchListItem;
@@ -149,7 +149,7 @@ export function MatchCard({ match, myPrediction }: MatchCardProps) {
           variant="outline"
           className="mt-6 w-full rounded-full bg-white"
         >
-          <Link href={`/matches/${match.id}`}>Szczegóły i typowanie</Link>
+          <AppLink href={`/matches/${match.id}`}>Szczegóły i typowanie</AppLink>
         </Button>
       </CardContent>
     </Card>

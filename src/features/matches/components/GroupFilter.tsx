@@ -1,5 +1,5 @@
-import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import { AppLink } from "@/src/components/navigation/AppLink";
 import {
   createMatchesUrl,
   MatchFilter,
@@ -40,9 +40,9 @@ export function GroupFilter({
               : "shrink-0 rounded-full bg-white"
           }
         >
-          <Link href={createMatchesUrl(activeFilter, "all", activeSearch)}>
+          <AppLink href={createMatchesUrl(activeFilter, "all", activeSearch)}>
             Wszystkie grupy
-          </Link>
+          </AppLink>
         </Button>
 
         {groups.map((group) => {
@@ -59,9 +59,11 @@ export function GroupFilter({
                   : "shrink-0 rounded-full bg-white"
               }
             >
-              <Link href={createMatchesUrl(activeFilter, group, activeSearch)}>
+              <AppLink
+                href={createMatchesUrl(activeFilter, group, activeSearch)}
+              >
                 {formatGroupName(group)}
-              </Link>
+              </AppLink>
             </Button>
           );
         })}

@@ -148,11 +148,7 @@ export default async function MatchesPage({ searchParams }: MatchesPageProps) {
           confirmedCount={confirmedCount}
         />
 
-        <Accordion
-          type="multiple"
-          defaultValue={["filters"]}
-          className="mt-3 space-y-5"
-        >
+        <Accordion type="multiple" defaultValue={[]} className="mt-3 space-y-5">
           <AccordionItem value="filters">
             <AccordionTrigger className="rounded-2xl bg-background hover:no-underline p-3">
               <span className="text-sm font-semibold">Dodatkowe filtry</span>

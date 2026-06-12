@@ -1,4 +1,3 @@
-import Link from "next/link";
 import { redirect } from "next/navigation";
 import {
   Beer,
@@ -30,6 +29,7 @@ import {
 import { NextMissingPredictionCard } from "@/src/features/dashboard/components/NextMissingPredictionCard";
 import { DashboardPredictionProgress } from "@/src/features/dashboard/components/DashboardPredictionProgress";
 import { RecentSettledPredictions } from "@/src/features/dashboard/components/RecentSettledPredictions";
+import { AppLink } from "@/src/components/navigation/AppLink";
 
 export default async function DashboardPage() {
   const supabase = await createClient();
@@ -130,7 +130,7 @@ export default async function DashboardPage() {
             size="lg"
             className="rounded-full bg-background text-foreground hover:bg-background/90"
           >
-            <Link href="/predictions">Sprawdź braki w typach</Link>
+            <AppLink href="/predictions">Sprawdź braki w typach</AppLink>
           </Button>
         </div>
       </div>
@@ -193,7 +193,7 @@ export default async function DashboardPage() {
             </div>
 
             <Button asChild variant="outline" className="rounded-full bg-white">
-              <Link href="/matches">Cały terminarz</Link>
+              <AppLink href="/matches">Cały terminarz</AppLink>
             </Button>
           </div>
 
@@ -219,7 +219,7 @@ export default async function DashboardPage() {
             </div>
 
             <Button asChild variant="outline" className="rounded-full bg-white">
-              <Link href="/ranking">Ranking</Link>
+              <AppLink href="/ranking">Ranking</AppLink>
             </Button>
           </div>
 
@@ -246,9 +246,6 @@ export default async function DashboardPage() {
 
                       <div className="min-w-0">
                         <p className="truncate font-bold">{item.username}</p>
-                        <p className="text-xs text-muted-foreground">
-                          {item.predictions_count} typów
-                        </p>
                       </div>
                     </div>
 

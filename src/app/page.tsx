@@ -1,4 +1,3 @@
-import Link from "next/link";
 import { Beer, CalendarDays, Trophy, UsersRound } from "lucide-react";
 import { Button } from "../components/ui/button";
 import { Badge } from "../components/ui/badge";
@@ -8,6 +7,9 @@ import {
   CardHeader,
   CardTitle,
 } from "../components/ui/card";
+import logo from "@/src/app/icon.png";
+import Image from "next/image";
+import { AppLink } from "../components/navigation/AppLink";
 
 const highlights = [
   {
@@ -37,22 +39,20 @@ export default function HomePage() {
         <div className="absolute inset-x-6 top-6 h-72 rounded-[3rem]" />
 
         <header className="relative z-10 flex items-center justify-between rounded-full border bg-white/80 px-5 py-3 shadow-sm backdrop-blur">
-          <Link href="/" className="flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-foreground text-background">
-              26
-            </div>
+          <AppLink href="/" className="flex items-center gap-3">
+            <Image src={logo} alt="Mundial Typer" width={48} height={48} />
             <div>
               <p className="font-heading text-lg leading-none">Mundial Typer</p>
               <p className="text-xs text-muted-foreground">Liga piwna 2026</p>
             </div>
-          </Link>
+          </AppLink>
 
           <div className="flex items-center gap-2">
             <Button asChild variant="ghost" className="hidden sm:inline-flex">
-              <Link href="/login">Logowanie</Link>
+              <AppLink href="/login">Logowanie</AppLink>
             </Button>
             <Button asChild className="rounded-full">
-              <Link href="/register">Wbijam</Link>
+              <AppLink href="/register">Wbijam</AppLink>
             </Button>
           </div>
         </header>
@@ -76,7 +76,7 @@ export default function HomePage() {
 
             <div className="mt-9 flex flex-col gap-3 sm:flex-row">
               <Button asChild size="lg" className="rounded-full px-8 text-base">
-                <Link href="/register">Zakładam konto</Link>
+                <AppLink href="/register">Zakładam konto</AppLink>
               </Button>
 
               <Button
@@ -85,7 +85,7 @@ export default function HomePage() {
                 variant="outline"
                 className="rounded-full bg-white px-8 text-base"
               >
-                <Link href="/login">Mam już konto</Link>
+                <AppLink href="/login">Mam już konto</AppLink>
               </Button>
             </div>
 
