@@ -57,8 +57,11 @@ export function RegisterForm() {
             <Label htmlFor="username">Nick</Label>
             <Input
               id="username"
-              placeholder="np. wojtek_90"
+              placeholder="np. znawca_67"
               autoComplete="username"
+              autoCapitalize="none"
+              autoCorrect="off"
+              spellCheck={false}
               {...register("username")}
             />
             {errors.username ? (
@@ -76,6 +79,9 @@ export function RegisterForm() {
               type="password"
               placeholder="Minimum 8 znaków"
               autoComplete="new-password"
+              autoCapitalize="none"
+              autoCorrect="off"
+              spellCheck={false}
               {...register("password")}
             />
             {errors.password ? (
