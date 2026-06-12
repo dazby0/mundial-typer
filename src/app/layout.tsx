@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Archivo_Black, Inter } from "next/font/google";
 import "./globals.css";
 import { NavigationLoadingProvider } from "../components/navigation/NavigationLoadingProvider";
+import { Analytics } from "@vercel/analytics/next";
 
 const archivoBlack = Archivo_Black({
   subsets: ["latin-ext"],
@@ -31,6 +32,7 @@ export default function RootLayout({
     <html lang="pl" className={`${archivoBlack.variable} ${inter.variable}`}>
       <body>
         <NavigationLoadingProvider>{children}</NavigationLoadingProvider>
+        <Analytics />
       </body>
     </html>
   );
