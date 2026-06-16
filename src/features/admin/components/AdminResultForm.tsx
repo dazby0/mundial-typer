@@ -130,22 +130,28 @@ export function AdminResultForm({ match }: AdminResultFormProps) {
 
         <div className="grid grid-cols-[1fr_auto_1fr] items-center gap-3">
           <Input
-            type="number"
+            type="text"
+            inputMode="numeric"
             min={0}
+            pattern="[0-9]*"
+            maxLength={2}
             value={homeScore}
             onChange={(event) => setHomeScore(event.target.value)}
-            className="h-12 text-center text-lg font-bold"
+            className="h-14 text-center text-xl font-bold placeholder:text-muted-foreground/35"
             placeholder="0"
           />
 
           <span className="font-heading text-2xl">:</span>
 
           <Input
-            type="number"
+            type="text"
+            inputMode="numeric"
             min={0}
+            pattern="[0-9]*"
+            maxLength={2}
             value={awayScore}
             onChange={(event) => setAwayScore(event.target.value)}
-            className="h-12 text-center text-lg font-bold"
+            className="h-14 text-center text-xl font-bold placeholder:text-muted-foreground/35"
             placeholder="0"
           />
         </div>
