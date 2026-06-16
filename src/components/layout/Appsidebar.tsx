@@ -11,6 +11,7 @@ import {
   ClipboardList,
   Flag,
   Crown,
+  GitBranch,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { LogoutButton } from "@/src/features/auth/components/LogoutButton";
@@ -38,6 +39,11 @@ const navigationItems = [
     label: "Tabele grupowe",
     href: "/groups",
     icon: Table2,
+  },
+  {
+    label: "Drabinka",
+    href: "/knockout",
+    icon: GitBranch,
   },
   {
     label: "Ranking",
@@ -77,7 +83,7 @@ export function AppSidebar({ username, role }: AppSidebarProps) {
         </div>
       </AppLink>
 
-      <div className="mt-8 rounded-3xl bg-background p-4">
+      <div className="mt-4 rounded-3xl bg-background p-4">
         <div className="flex items-center gap-3">
           <div className="flex h-11 w-11 items-center justify-center rounded-full bg-primary text-primary-foreground">
             {userInitial}
@@ -92,7 +98,7 @@ export function AppSidebar({ username, role }: AppSidebarProps) {
         </div>
       </div>
 
-      <nav className="mt-6 space-y-1">
+      <nav className="mt-2 space-y-1">
         {navigationItems.map((item) => {
           const Icon = item.icon;
           const isActive = pathname === item.href;

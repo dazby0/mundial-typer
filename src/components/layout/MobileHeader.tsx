@@ -13,6 +13,7 @@ import {
   ClipboardList,
   Flag,
   Crown,
+  GitBranch,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { LogoutButton } from "@/src/features/auth/components/LogoutButton";
@@ -41,6 +42,11 @@ const navigationItems = [
     label: "Tabele grupowe",
     href: "/groups",
     icon: Table2,
+  },
+  {
+    label: "Drabinka",
+    href: "/knockout",
+    icon: GitBranch,
   },
   {
     label: "Ranking",
@@ -113,7 +119,7 @@ export function MobileHeader({ username, role }: MobileHeaderProps) {
               </div>
             </div>
 
-            <nav className="mt-6 space-y-1 flex-1">
+            <nav className="mt-6 space-y-1 ">
               {navigationItems.map((item) => {
                 const Icon = item.icon;
                 const isActive = pathname === item.href;
@@ -153,7 +159,7 @@ export function MobileHeader({ username, role }: MobileHeaderProps) {
               ) : null}
             </nav>
 
-            <div className="rounded-3xl bg-amber-100 p-4 text-amber-950">
+            <div className="rounded-3xl bg-amber-100 p-4 text-amber-950 mt-6">
               <div className="flex items-center gap-3">
                 <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-amber-300">
                   <Beer className="h-5 w-5" />
