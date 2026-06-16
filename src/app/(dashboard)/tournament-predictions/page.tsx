@@ -50,9 +50,7 @@ export default async function TournamentPredictionsPage() {
     throw new Error("Could not verify tournament status.");
   }
 
-  const unlockUntil = new Date("2026-06-13T00:00:00+02:00");
-
-  const isLocked = Boolean(isTournamentStarted) && new Date() >= unlockUntil;
+  const isLocked = Boolean(isTournamentStarted);
 
   const { data: publicPredictionsData, error: publicPredictionsError } =
     Boolean(isLocked)

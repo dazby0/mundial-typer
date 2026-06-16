@@ -2,7 +2,6 @@ import { Toaster } from "@/components/ui/sonner";
 import { AppSidebar } from "@/src/components/layout/Appsidebar";
 import { MobileHeader } from "@/src/components/layout/MobileHeader";
 import { createClient } from "@/src/lib/supabase/server";
-import { TournamentPredictionReminderModal } from "@/src/features/tournament-predictions/components/TournamentPredictionReminderModal";
 import { redirect } from "next/navigation";
 
 export default async function DashboardLayout({
@@ -30,14 +29,6 @@ export default async function DashboardLayout({
     redirect("/login");
   }
 
-  const { data: tournamentPrediction } = await supabase
-    .from("tournament_predictions")
-    .select("id")
-    .eq("user_id", user.id)
-    .maybeSingle();
-
-  const shouldShowTournamentReminder = !tournamentPrediction;
-
   return (
     <div className="min-h-screen bg-background text-foreground lg:flex">
       <AppSidebar username={profile.username} role={profile.role} />
@@ -50,10 +41,6 @@ export default async function DashboardLayout({
           <Toaster richColors position="top-right" />
         </main>
       </div>
-
-      <TournamentPredictionReminderModal
-        shouldShow={shouldShowTournamentReminder}
-      />
     </div>
   );
 }
