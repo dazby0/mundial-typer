@@ -1,10 +1,13 @@
 import { MatchListItem } from "../types/match.types";
 
+const APP_TIME_ZONE = "Europe/Warsaw";
+
 export function formatMatchDate(date: string) {
   return new Intl.DateTimeFormat("pl-PL", {
     weekday: "long",
     day: "numeric",
     month: "long",
+    timeZone: APP_TIME_ZONE,
   }).format(new Date(date));
 }
 
@@ -12,6 +15,7 @@ export function formatMatchTime(date: string) {
   return new Intl.DateTimeFormat("pl-PL", {
     hour: "2-digit",
     minute: "2-digit",
+    timeZone: APP_TIME_ZONE,
   }).format(new Date(date));
 }
 
@@ -24,7 +28,7 @@ export function groupMatchesByDate<T extends { kickoff_time: string }>(
 ) {
   return matches.reduce<Record<string, T[]>>((acc, match) => {
     const key = new Intl.DateTimeFormat("en-CA", {
-      timeZone: "Europe/Warsaw",
+      timeZone: APP_TIME_ZONE,
       year: "numeric",
       month: "2-digit",
       day: "2-digit",
