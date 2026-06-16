@@ -143,13 +143,13 @@ export default async function DashboardPage() {
         />
       </div>
 
-      <div className="mt-6 grid gap-6 lg:grid-cols-[1.45fr_1fr]">
+      <div className="mt-6 grid gap-6 xl:grid-cols-[minmax(0,1.45fr)_minmax(320px,1fr)]">
         <NextMissingPredictionCard
           match={nextMissingMatch}
           todayMissingCount={todayMissingMatches.length}
         />
 
-        <div className="grid gap-4 grid-cols-2">
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-2">
           <DashboardStatCard
             title="Obstawione"
             value={`${predictedCount}/${matches.length}`}

@@ -98,13 +98,13 @@ export function NextMissingPredictionCard({
 
   if (!match) {
     return (
-      <div className="rounded-[2rem] bg-white p-6 shadow-sm">
+      <div className="rounded-[2rem] bg-white p-5 shadow-sm sm:p-6">
         <div className="flex items-start gap-4">
           <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-primary/10 text-primary">
             <CheckCircle2 className="h-5 w-5" />
           </div>
 
-          <div>
+          <div className="min-w-0">
             <p className="text-xl font-black">Nie ma zaległych typów</p>
 
             <p className="mt-1 text-sm text-muted-foreground">
@@ -118,166 +118,178 @@ export function NextMissingPredictionCard({
   }
 
   return (
-    <div className="rounded-[2rem] bg-foreground p-4 text-background shadow-sm sm:p-6">
-      <div className="grid gap-5 lg:grid-cols-[minmax(0,1fr)_320px] lg:items-stretch xl:grid-cols-[minmax(0,1fr)_360px]">
-        <div className="min-w-0">
-          <div className="flex items-start gap-4">
-            <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-background text-foreground">
-              <AlertTriangle className="h-5 w-5" />
-            </div>
-
-            <div>
-              <p className="text-sm uppercase tracking-[0.2em] text-background/60">
-                Najbliższy brak typu
-              </p>
-
-              <h2 className="mt-1 text-lg font-black sm:text-2xl">
-                Ratuj honor, zanim zamkną bramkę
-              </h2>
-
-              <p className="mt-2 text-sm text-background/70">
-                {todayMissingCount > 0
-                  ? `Dzisiaj masz ${todayMissingCount} mecze bez typu. To już nie jest planowanie, to gaszenie pożaru.`
-                  : "Ten mecz jest najbliżej bez Twojego typu. Jeszcze możesz udawać, że to była przemyślana decyzja."}
-              </p>
-            </div>
+    <div className="overflow-hidden rounded-[2rem] bg-foreground p-4 text-background shadow-sm sm:p-6">
+      <div className="flex flex-col gap-5">
+        <div className="flex items-start gap-4">
+          <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-background text-foreground">
+            <AlertTriangle className="h-5 w-5" />
           </div>
 
-          <div className="mt-5 grid grid-cols-[1fr_auto_1fr] items-center gap-2 sm:gap-4">
-            <div className="flex items-center gap-2 sm:gap-3">
-              <TeamFlag
-                name={match.home_team_name_pl}
-                flagCode={match.home_team_flag_code}
-                flagEmoji={match.home_team_flag_emoji}
-                className="h-10 w-10 sm:h-12 sm:w-12"
-              />
+          <div className="min-w-0">
+            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-background/60 sm:text-sm">
+              Najbliższy brak typu
+            </p>
 
-              <div className="min-w-0">
-                <p className="truncate text-sm font-black sm:text-base">
-                  {match.home_team_name_pl}
-                </p>
-                <p className="text-xs text-background/60">
-                  {match.home_team_code}
-                </p>
-              </div>
-            </div>
+            <h2 className="mt-1 text-xl font-black leading-tight sm:text-2xl">
+              Ratuj honor, zanim zamkną bramkę
+            </h2>
 
-            <div className="text-center font-heading text-2xl text-background/50">
-              VS
-            </div>
-
-            <div className="flex items-center justify-end gap-2 sm:gap-3">
-              <div className="min-w-0 text-right">
-                <p className="truncate text-sm font-black sm:text-base">
-                  {match.away_team_name_pl}
-                </p>
-                <p className="text-xs text-background/60">
-                  {match.away_team_code}
-                </p>
-              </div>
-
-              <TeamFlag
-                name={match.away_team_name_pl}
-                flagCode={match.away_team_flag_code}
-                flagEmoji={match.away_team_flag_emoji}
-                className="h-10 w-10 sm:h-12 sm:w-12"
-              />
-            </div>
-          </div>
-
-          <div className="mt-4 flex flex-wrap gap-2 text-xs text-background/70 sm:text-sm">
-            <span className="rounded-full bg-background/10 px-3 py-1.5">
-              {formatGroupName(match.group_name)}
-            </span>
-
-            <span className="rounded-full bg-background/10 px-3 py-1.5">
-              {formatMatchDate(match.kickoff_time)},{" "}
-              {formatMatchTime(match.kickoff_time)}
-            </span>
+            <p className="mt-2 max-w-3xl text-sm leading-relaxed text-background/70">
+              {todayMissingCount > 0
+                ? `Dzisiaj masz ${todayMissingCount} mecze bez typu. To już nie jest planowanie, to gaszenie pożaru.`
+                : "Ten mecz jest najbliżej bez Twojego typu. Jeszcze możesz udawać, że to była przemyślana decyzja."}
+            </p>
           </div>
         </div>
 
-        <div className="flex flex-col gap-3">
-          <div className="flex flex-1 flex-col justify-center rounded-3xl border border-background/10 bg-background/10 p-4">
-            <div className="flex items-center justify-center gap-2 text-xs font-semibold uppercase tracking-[0.16em] text-background/60">
-              <Clock className="h-4 w-4" />
-              Do zamknięcia typowania
-            </div>
+        <div className="grid gap-4 2xl:grid-cols-[minmax(0,1fr)_340px] 2xl:items-stretch">
+          <div className="min-w-0 rounded-3xl bg-background/10 p-4 sm:p-5">
+            <div className="grid grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-center gap-3 sm:gap-5">
+              <div className="min-w-0">
+                <div className="flex min-w-0 items-center gap-3">
+                  <TeamFlag
+                    name={match.home_team_name_pl}
+                    flagCode={match.home_team_flag_code}
+                    flagEmoji={match.home_team_flag_emoji}
+                    className="h-10 w-10 shrink-0 sm:h-12 sm:w-12"
+                  />
 
-            {timeLeft.isExpired ? (
-              <p className="mt-3 text-center text-sm font-bold text-background">
-                Typowanie powinno być już zamknięte.
-              </p>
-            ) : (
-              <div className="mt-3 flex items-center justify-center gap-1.5 sm:gap-2 lg:gap-1.5">
-                {timeLeft.days > 0 ? (
-                  <>
-                    <div className="rounded-2xl bg-background px-3 py-2 text-center text-foreground shadow-sm">
-                      <p className="font-heading text-xl">
-                        {formatTimePart(timeLeft.days)}
-                      </p>
-                      <p className="text-[10px] uppercase tracking-wide text-muted-foreground">
-                        dni
-                      </p>
-                    </div>
+                  <div className="min-w-0">
+                    <p className="truncate text-sm font-black sm:text-base">
+                      {match.home_team_name_pl}
+                    </p>
 
-                    <span className="font-heading text-xl text-background/50">
-                      :
-                    </span>
-                  </>
-                ) : null}
-
-                <div className="rounded-2xl bg-background px-3 py-2 text-center text-foreground shadow-sm">
-                  <p className="font-heading text-xl">
-                    {formatTimePart(timeLeft.hours)}
-                  </p>
-                  <p className="text-[10px] uppercase tracking-wide text-muted-foreground">
-                    godz.
-                  </p>
-                </div>
-
-                <span className="font-heading text-xl text-background/50">
-                  :
-                </span>
-
-                <div className="rounded-2xl bg-background px-3 py-2 text-center text-foreground shadow-sm">
-                  <p className="font-heading text-xl">
-                    {formatTimePart(timeLeft.minutes)}
-                  </p>
-                  <p className="text-[10px] uppercase tracking-wide text-muted-foreground">
-                    min.
-                  </p>
-                </div>
-
-                <span className="font-heading text-xl text-background/50">
-                  :
-                </span>
-
-                <div className="rounded-2xl bg-background px-3 py-2 text-center text-foreground shadow-sm">
-                  <p className="font-heading text-xl">
-                    {formatTimePart(timeLeft.seconds)}
-                  </p>
-                  <p className="text-[10px] uppercase tracking-wide text-muted-foreground">
-                    sek.
-                  </p>
+                    <p className="text-xs text-background/60">
+                      {match.home_team_code}
+                    </p>
+                  </div>
                 </div>
               </div>
-            )}
 
-            {!timeLeft.isExpired ? (
-              <p className="mt-3 text-center text-xs text-background/60">
-                Po pierwszym gwizdku zostaje już tylko udawanie, że zapomniałeś
-                celowo.
-              </p>
-            ) : null}
+              <div className="rounded-2xl bg-background/10 px-3 py-2 text-center font-heading text-xl text-background/60 sm:text-2xl">
+                VS
+              </div>
+
+              <div className="min-w-0">
+                <div className="flex min-w-0 items-center justify-end gap-3">
+                  <div className="min-w-0 text-right">
+                    <p className="truncate text-sm font-black sm:text-base">
+                      {match.away_team_name_pl}
+                    </p>
+
+                    <p className="text-xs text-background/60">
+                      {match.away_team_code}
+                    </p>
+                  </div>
+
+                  <TeamFlag
+                    name={match.away_team_name_pl}
+                    flagCode={match.away_team_flag_code}
+                    flagEmoji={match.away_team_flag_emoji}
+                    className="h-10 w-10 shrink-0 sm:h-12 sm:w-12"
+                  />
+                </div>
+              </div>
+            </div>
+
+            <div className="mt-4 flex flex-wrap gap-2 text-xs text-background/70 sm:text-sm">
+              <span className="rounded-full bg-background/10 px-3 py-1.5">
+                {formatGroupName(match.group_name)}
+              </span>
+
+              <span className="rounded-full bg-background/10 px-3 py-1.5">
+                {formatMatchDate(match.kickoff_time)},{" "}
+                {formatMatchTime(match.kickoff_time)}
+              </span>
+            </div>
           </div>
 
-          <Button
-            asChild
-            className="w-full rounded-full bg-background text-foreground hover:bg-background/90"
-          >
-            <AppLink href={`/matches/${match.id}`}>Obstaw teraz</AppLink>
-          </Button>
+          <div className="flex min-w-0 flex-col gap-3">
+            <div className="flex flex-1 flex-col justify-center rounded-3xl border border-background/10 bg-background/10 p-4">
+              <div className="flex items-center justify-center gap-2 text-center text-[11px] font-semibold uppercase tracking-[0.16em] text-background/60 sm:text-xs">
+                <Clock className="h-4 w-4 shrink-0" />
+                <span>Do zamknięcia typowania</span>
+              </div>
+
+              {timeLeft.isExpired ? (
+                <p className="mt-3 text-center text-sm font-bold text-background">
+                  Typowanie powinno być już zamknięte.
+                </p>
+              ) : (
+                <div className="mt-3 flex flex-wrap items-center justify-center gap-1.5 sm:gap-2">
+                  {timeLeft.days > 0 ? (
+                    <>
+                      <div className="min-w-14 rounded-2xl bg-background px-3 py-2 text-center text-foreground shadow-sm">
+                        <p className="font-heading text-xl">
+                          {formatTimePart(timeLeft.days)}
+                        </p>
+
+                        <p className="text-[10px] uppercase tracking-wide text-muted-foreground">
+                          dni
+                        </p>
+                      </div>
+
+                      <span className="font-heading text-xl text-background/50">
+                        :
+                      </span>
+                    </>
+                  ) : null}
+
+                  <div className="min-w-14 rounded-2xl bg-background px-3 py-2 text-center text-foreground shadow-sm">
+                    <p className="font-heading text-xl">
+                      {formatTimePart(timeLeft.hours)}
+                    </p>
+
+                    <p className="text-[10px] uppercase tracking-wide text-muted-foreground">
+                      godz.
+                    </p>
+                  </div>
+
+                  <span className="font-heading text-xl text-background/50">
+                    :
+                  </span>
+
+                  <div className="min-w-14 rounded-2xl bg-background px-3 py-2 text-center text-foreground shadow-sm">
+                    <p className="font-heading text-xl">
+                      {formatTimePart(timeLeft.minutes)}
+                    </p>
+
+                    <p className="text-[10px] uppercase tracking-wide text-muted-foreground">
+                      min.
+                    </p>
+                  </div>
+
+                  <span className="font-heading text-xl text-background/50">
+                    :
+                  </span>
+
+                  <div className="min-w-14 rounded-2xl bg-background px-3 py-2 text-center text-foreground shadow-sm">
+                    <p className="font-heading text-xl">
+                      {formatTimePart(timeLeft.seconds)}
+                    </p>
+
+                    <p className="text-[10px] uppercase tracking-wide text-muted-foreground">
+                      sek.
+                    </p>
+                  </div>
+                </div>
+              )}
+
+              {!timeLeft.isExpired ? (
+                <p className="mt-3 text-center text-xs leading-relaxed text-background/60">
+                  Po pierwszym gwizdku zostaje już tylko udawanie, że
+                  zapomniałeś celowo.
+                </p>
+              ) : null}
+            </div>
+
+            <Button
+              asChild
+              className="w-full rounded-full bg-background text-foreground hover:bg-background/90"
+            >
+              <AppLink href={`/matches/${match.id}`}>Obstaw teraz</AppLink>
+            </Button>
+          </div>
         </div>
       </div>
     </div>
