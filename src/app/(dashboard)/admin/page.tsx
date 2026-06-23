@@ -7,9 +7,11 @@ import { AdminMatchFilters } from "@/src/features/admin/components/AdminMatchFil
 import { AdminMatchItem } from "@/src/features/admin/types/admin-match.types";
 import {
   filterAdminMatchesByGroup,
+  filterAdminMatchesByStage,
   filterAdminMatchesByStatus,
   getAvailableAdminGroups,
   getValidAdminGroupFilter,
+  getValidAdminStageFilter,
   getValidAdminStatusFilter,
 } from "@/src/features/admin/utils/admin-match-filters";
 import {
@@ -25,14 +27,16 @@ type AdminPageProps = {
   searchParams: Promise<{
     status?: string;
     group?: string;
+    stage?: string;
   }>;
 };
 
 export default async function AdminPage({ searchParams }: AdminPageProps) {
-  const { status, group } = await searchParams;
+  const { status, group, stage } = await searchParams;
 
   const activeStatus = getValidAdminStatusFilter(status);
   const activeGroup = getValidAdminGroupFilter(group);
+  const activeStage = getValidAdminStageFilter(stage);
 
   const supabase = await createClient();
 
@@ -66,7 +70,11 @@ export default async function AdminPage({ searchParams }: AdminPageProps) {
   const matches = (data || []) as AdminMatchItem[];
 
   const availableGroups = getAvailableAdminGroups(matches);
-  const groupFilteredMatches = filterAdminMatchesByGroup(matches, activeGroup);
+  const stageFilteredMatches = filterAdminMatchesByStage(matches, activeStage);
+  const groupFilteredMatches = filterAdminMatchesByGroup(
+    stageFilteredMatches,
+    activeGroup,
+  );
 
   const missingMatches = groupFilteredMatches.filter(
     (match) => match.status !== "finished",
@@ -170,6 +178,7 @@ export default async function AdminPage({ searchParams }: AdminPageProps) {
         <AdminMatchFilters
           activeStatus={activeStatus}
           activeGroup={activeGroup}
+          activeStage={activeStage}
           groups={availableGroups}
           allCount={groupFilteredMatches.length}
           missingCount={missingMatches.length}

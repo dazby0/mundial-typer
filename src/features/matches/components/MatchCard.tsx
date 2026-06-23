@@ -26,31 +26,6 @@ type MatchCardProps = {
   myPrediction?: MyMatchPrediction;
 };
 
-function getPredictedWinnerName(
-  match: MatchListItem,
-  prediction?: MyMatchPrediction,
-) {
-  if (!prediction?.predicted_winner_team_id) {
-    return null;
-  }
-
-  const homeTeamName =
-    match.home_team_name_pl || match.home_team_name_en || match.home_team_code;
-
-  const awayTeamName =
-    match.away_team_name_pl || match.away_team_name_en || match.away_team_code;
-
-  if (prediction.predicted_winner_team_id === match.home_team_id) {
-    return homeTeamName;
-  }
-
-  if (prediction.predicted_winner_team_id === match.away_team_id) {
-    return awayTeamName;
-  }
-
-  return null;
-}
-
 export function MatchCard({ match, myPrediction }: MatchCardProps) {
   const isFinished = match.status === "finished";
   const isKnockoutMatch = isKnockoutStage(match.stage);
@@ -78,13 +53,9 @@ export function MatchCard({ match, myPrediction }: MatchCardProps) {
     match.home_penalty_score !== null &&
     match.away_penalty_score !== null;
 
-  const predictedWinnerName = getPredictedWinnerName(match, myPrediction);
-
   const predictionDescription =
     myPrediction && isKnockoutMatch
-      ? `Typ: ${myPrediction.predicted_home_score}:${myPrediction.predicted_away_score}${
-          predictedWinnerName ? `, awans ${predictedWinnerName}` : ""
-        }, ${getResolutionMethodLabel(myPrediction.predicted_resolution_method).toLowerCase()}.`
+      ? `Dowody w systemie, nic tylko trzymać kciuki lub iść spać.`
       : "Dowody są zapisane w systemie.";
 
   return (
