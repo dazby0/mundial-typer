@@ -11,6 +11,10 @@ import {
 import { AdminResultForm } from "@/src/features/admin/components/AdminResultForm";
 import { AdminMatchItem } from "@/src/features/admin/types/admin-match.types";
 import { AppLink } from "@/src/components/navigation/AppLink";
+import {
+  getResolutionMethodLabel,
+  isKnockoutStage,
+} from "../../knockout/utils/knockout-rules";
 
 type AdminMatchResultCardProps = {
   match: AdminMatchItem;
@@ -19,13 +23,30 @@ type AdminMatchResultCardProps = {
 export function AdminMatchResultCard({ match }: AdminMatchResultCardProps) {
   const hasResult = match.home_score !== null && match.away_score !== null;
 
+  const isKnockoutMatch = isKnockoutStage(match.stage);
+
+  const competitionLabel = isKnockoutMatch
+    ? match.round_label || "Faza pucharowa"
+    : formatGroupName(match.group_name || "");
+
+  const homeTeamName =
+    match.home_team_name_pl || match.home_team_name_en || match.home_team_code;
+
+  const awayTeamName =
+    match.away_team_name_pl || match.away_team_name_en || match.away_team_code;
+
+  const hasPenaltyResult =
+    match.resolution_method === "penalties" &&
+    match.home_penalty_score !== null &&
+    match.away_penalty_score !== null;
+
   return (
     <div className="rounded-[2rem] bg-white p-5 shadow-sm">
       <div className="flex flex-col gap-5 xl:flex-row xl:items-center xl:justify-between">
         <div className="min-w-0 flex-1">
           <div className="flex flex-wrap items-center gap-2">
             <Badge variant="secondary" className="rounded-full">
-              {formatGroupName(match.group_name)}
+              {competitionLabel}
             </Badge>
 
             <Badge variant="outline" className="rounded-full bg-white">
@@ -39,6 +60,12 @@ export function AdminMatchResultCard({ match }: AdminMatchResultCardProps) {
               {hasResult ? "Wynik wpisany" : getMatchStatusLabel(match.status)}
             </Badge>
 
+            {isKnockoutMatch && match.resolution_method ? (
+              <Badge variant="outline" className="rounded-full bg-white">
+                {getResolutionMethodLabel(match.resolution_method)}
+              </Badge>
+            ) : null}
+
             <Badge variant="outline" className="rounded-full bg-white">
               <Users className="mr-1 h-3.5 w-3.5" />
               {match.predictions_count} typów do przeliczenia
@@ -48,7 +75,7 @@ export function AdminMatchResultCard({ match }: AdminMatchResultCardProps) {
           <div className="mt-4 grid gap-4 md:grid-cols-[1fr_auto_1fr] md:items-center">
             <div className="flex items-center gap-3">
               <TeamFlag
-                name={match.home_team_name_pl}
+                name={homeTeamName}
                 flagCode={match.home_team_flag_code}
                 flagEmoji={match.home_team_flag_emoji}
                 className="h-12 w-12"
@@ -73,6 +100,12 @@ export function AdminMatchResultCard({ match }: AdminMatchResultCardProps) {
                 <span className="mx-2 text-background/40">:</span>
                 {match.away_score === null ? "-" : match.away_score}
               </p>
+
+              {hasPenaltyResult ? (
+                <p className="mt-1 text-xs text-background/60">
+                  karne {match.home_penalty_score}:{match.away_penalty_score}
+                </p>
+              ) : null}
             </div>
 
             <div className="flex items-center gap-3 md:justify-end">
@@ -86,7 +119,7 @@ export function AdminMatchResultCard({ match }: AdminMatchResultCardProps) {
               </div>
 
               <TeamFlag
-                name={match.away_team_name_pl}
+                name={awayTeamName}
                 flagCode={match.away_team_flag_code}
                 flagEmoji={match.away_team_flag_emoji}
                 className="h-12 w-12"

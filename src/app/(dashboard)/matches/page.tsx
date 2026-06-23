@@ -67,7 +67,17 @@ export default async function MatchesPage({ searchParams }: MatchesPageProps) {
 
   const { data: predictionsData, error: predictionsError } = await supabase
     .from("predictions")
-    .select("id, match_id, predicted_home_score, predicted_away_score, points")
+    .select(
+      `
+        id,
+        match_id,
+        predicted_home_score,
+        predicted_away_score,
+        predicted_winner_team_id,
+        predicted_resolution_method,
+        points
+      `,
+    )
     .eq("user_id", user.id);
 
   if (predictionsError) {

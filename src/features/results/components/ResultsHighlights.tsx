@@ -81,7 +81,7 @@ export function ResultsHighlights({ results }: ResultsHighlightsProps) {
     <div className="grid gap-4 lg:grid-cols-3">
       <HighlightCard
         title="Mecz ekspertów"
-        label="najwięcej 3-punktowców"
+        label="najwięcej ideałów"
         description={
           expertMatch && expertMatch.exact_scores_count > 0
             ? "Tutaj grupa wyglądała jak sztab analityków. Albo jakby ktoś miał przeciek z przyszłości."

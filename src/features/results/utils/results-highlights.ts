@@ -41,5 +41,15 @@ export function getResultsHighlights(results: ResultMatchItem[]) {
 }
 
 export function formatResultMatchName(match: ResultMatchItem) {
-  return `${match.home_team_name_pl} ${match.home_score}:${match.away_score} ${match.away_team_name_pl}`;
+  const homeTeamName = match.home_team_name_pl || match.home_team_code;
+  const awayTeamName = match.away_team_name_pl || match.away_team_code;
+
+  const penaltyResult =
+    match.resolution_method === "penalties" &&
+    match.home_penalty_score !== null &&
+    match.away_penalty_score !== null
+      ? `, karne ${match.home_penalty_score}:${match.away_penalty_score}`
+      : "";
+
+  return `${homeTeamName} ${match.home_score}:${match.away_score} ${awayTeamName}${penaltyResult}`;
 }

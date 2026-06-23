@@ -47,14 +47,13 @@ export function filterAdminMatchesByGroup(
 }
 
 export function getAvailableAdminGroups(matches: AdminMatchItem[]) {
-  return Array.from(new Set(matches.map((match) => match.group_name))).sort(
-    (a, b) => {
-      const letterA = a.replace("Group ", "");
-      const letterB = b.replace("Group ", "");
-
-      return letterA.localeCompare(letterB);
-    },
-  );
+  return Array.from(
+    new Set(
+      matches
+        .map((match) => match.group_name)
+        .filter((groupName): groupName is string => Boolean(groupName)),
+    ),
+  ).sort();
 }
 
 export function createAdminMatchesUrl(

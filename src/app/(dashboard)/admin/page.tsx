@@ -1,5 +1,5 @@
 import { redirect } from "next/navigation";
-import { ShieldCheck, Trophy, Users } from "lucide-react";
+import { GitBranch, ShieldCheck, Trophy, Users } from "lucide-react";
 import { Badge } from "@/src/components/ui/badge";
 import { createClient } from "@/src/lib/supabase/server";
 import { AdminMatchResultCard } from "@/src/features/admin/components/AdminMatchResultCard";
@@ -100,16 +100,25 @@ export default async function AdminPage({ searchParams }: AdminPageProps) {
               punkty, aktualizuje ranking i odpala piwną księgowość.
             </p>
 
-            <Button
-              asChild
-              variant="outline"
-              className="rounded-full bg-white mt-3"
-            >
-              <AppLink href="/admin/tournament-bonuses">
-                <Trophy className="h-4 w-4" />
-                Rozlicz bonusy turniejowe
-              </AppLink>
-            </Button>
+            <div className="mt-3 flex flex-wrap gap-3">
+              <Button
+                asChild
+                variant="outline"
+                className="rounded-full bg-white"
+              >
+                <AppLink href="/admin/tournament-bonuses">
+                  <Trophy className="h-4 w-4" />
+                  Rozlicz bonusy turniejowe
+                </AppLink>
+              </Button>
+
+              <Button asChild className="rounded-full">
+                <AppLink href="/admin/knockout">
+                  <GitBranch className="h-4 w-4" />
+                  Zatwierdź drabinkę
+                </AppLink>
+              </Button>
+            </div>
           </div>
 
           <div className="grid gap-3 sm:grid-cols-3 lg:min-w-140">

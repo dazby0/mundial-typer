@@ -16,18 +16,76 @@ import {
   isStartingSoon,
 } from "../utils/match-filters";
 import { AppLink } from "@/src/components/navigation/AppLink";
+import {
+  getResolutionMethodLabel,
+  isKnockoutStage,
+} from "@/src/features/knockout/utils/knockout-rules";
 
 type MatchCardProps = {
   match: MatchListItem;
   myPrediction?: MyMatchPrediction;
 };
 
+function getPredictedWinnerName(
+  match: MatchListItem,
+  prediction?: MyMatchPrediction,
+) {
+  if (!prediction?.predicted_winner_team_id) {
+    return null;
+  }
+
+  const homeTeamName =
+    match.home_team_name_pl || match.home_team_name_en || match.home_team_code;
+
+  const awayTeamName =
+    match.away_team_name_pl || match.away_team_name_en || match.away_team_code;
+
+  if (prediction.predicted_winner_team_id === match.home_team_id) {
+    return homeTeamName;
+  }
+
+  if (prediction.predicted_winner_team_id === match.away_team_id) {
+    return awayTeamName;
+  }
+
+  return null;
+}
+
 export function MatchCard({ match, myPrediction }: MatchCardProps) {
   const isFinished = match.status === "finished";
+  const isKnockoutMatch = isKnockoutStage(match.stage);
   const matchToday = isMatchToday(match);
   const lastCall = isLastCallMatch(match);
   const startingSoon = isStartingSoon(match);
   const hoursToKickoff = getHoursToKickoff(match);
+
+  const homeTeamName =
+    match.home_team_name_pl || match.home_team_name_en || match.home_team_code;
+
+  const awayTeamName =
+    match.away_team_name_pl || match.away_team_name_en || match.away_team_code;
+
+  const competitionLabel = match.group_name
+    ? formatGroupName(match.group_name)
+    : match.round_label || "Faza pucharowa";
+
+  const scheduleLabel = isKnockoutMatch
+    ? match.round_label || "Faza pucharowa"
+    : `Kolejka ${match.matchday ?? "-"}`;
+
+  const hasPenaltyResult =
+    match.resolution_method === "penalties" &&
+    match.home_penalty_score !== null &&
+    match.away_penalty_score !== null;
+
+  const predictedWinnerName = getPredictedWinnerName(match, myPrediction);
+
+  const predictionDescription =
+    myPrediction && isKnockoutMatch
+      ? `Typ: ${myPrediction.predicted_home_score}:${myPrediction.predicted_away_score}${
+          predictedWinnerName ? `, awans ${predictedWinnerName}` : ""
+        }, ${getResolutionMethodLabel(myPrediction.predicted_resolution_method).toLowerCase()}.`
+      : "Dowody są zapisane w systemie.";
 
   return (
     <Card className="border-0 bg-white shadow-sm transition hover:-translate-y-0.5 hover:shadow-md">
@@ -35,10 +93,11 @@ export function MatchCard({ match, myPrediction }: MatchCardProps) {
         <div className="flex items-start justify-between gap-3">
           <div>
             <p className="text-xs font-medium uppercase tracking-[0.2em] text-muted-foreground">
-              Mecz #{match.match_number}
+              Mecz #{match.match_number ?? "-"}
             </p>
+
             <p className="mt-1 text-sm font-medium text-primary">
-              {formatGroupName(match.group_name)}
+              {competitionLabel}
             </p>
           </div>
 
@@ -67,18 +126,34 @@ export function MatchCard({ match, myPrediction }: MatchCardProps) {
             >
               {getMatchStatusLabel(match.status)}
             </Badge>
+
+            {isKnockoutMatch && match.resolution_method ? (
+              <Badge variant="outline" className="rounded-full bg-white">
+                {getResolutionMethodLabel(match.resolution_method)}
+              </Badge>
+            ) : null}
           </div>
         </div>
 
         <div className="rounded-3xl bg-background p-4">
-          <div className="flex items-center justify-between">
+          <div className="flex items-center justify-between gap-3">
             <p className="font-heading text-3xl">
               {formatMatchTime(match.kickoff_time)}
             </p>
-            <p className="text-sm text-muted-foreground">
-              Kolejka {match.matchday}
+
+            <p className="text-right text-sm text-muted-foreground">
+              {scheduleLabel}
             </p>
           </div>
+
+          {hasPenaltyResult ? (
+            <div className="mt-3 rounded-2xl bg-white px-4 py-2 text-sm text-muted-foreground">
+              Karne:{" "}
+              <span className="font-semibold text-foreground">
+                {match.home_penalty_score}:{match.away_penalty_score}
+              </span>
+            </div>
+          ) : null}
 
           {match.venue_city_pl ? (
             <div className="mt-3 flex items-center gap-2 text-sm text-muted-foreground">
@@ -92,7 +167,7 @@ export function MatchCard({ match, myPrediction }: MatchCardProps) {
       <CardContent>
         <div className="space-y-4">
           <TeamLine
-            name={match.home_team_name_pl}
+            name={homeTeamName}
             code={match.home_team_code}
             flagCode={match.home_team_flag_code}
             flagEmoji={match.home_team_flag_emoji}
@@ -102,7 +177,7 @@ export function MatchCard({ match, myPrediction }: MatchCardProps) {
           <div className="h-px bg-border" />
 
           <TeamLine
-            name={match.away_team_name_pl}
+            name={awayTeamName}
             code={match.away_team_code}
             flagCode={match.away_team_flag_code}
             flagEmoji={match.away_team_flag_emoji}
@@ -116,12 +191,13 @@ export function MatchCard({ match, myPrediction }: MatchCardProps) {
                   <p className="text-xs font-medium uppercase tracking-[0.18em] text-muted-foreground">
                     Status typu
                   </p>
+
                   <p className="mt-1 text-sm text-muted-foreground">
-                    Dowody są zapisane w systemie.
+                    {predictionDescription}
                   </p>
                 </div>
 
-                <p className="rounded-full bg-primary px-3 py-1 text-xs font-semibold text-primary-foreground">
+                <p className="shrink-0 rounded-full bg-primary px-3 py-1 text-xs font-semibold text-primary-foreground">
                   Zatwierdzono
                 </p>
               </div>
@@ -131,12 +207,13 @@ export function MatchCard({ match, myPrediction }: MatchCardProps) {
                   <p className="text-xs font-medium uppercase tracking-[0.18em] text-muted-foreground">
                     Status typu
                   </p>
+
                   <p className="mt-1 text-sm text-muted-foreground">
                     Jeszcze cisza. Ekspert analizuje.
                   </p>
                 </div>
 
-                <p className="rounded-full bg-muted px-3 py-1 text-xs font-semibold text-muted-foreground">
+                <p className="shrink-0 rounded-full bg-muted px-3 py-1 text-xs font-semibold text-muted-foreground">
                   Nie typowano
                 </p>
               </div>

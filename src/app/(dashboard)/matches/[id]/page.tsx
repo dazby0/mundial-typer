@@ -24,6 +24,9 @@ import { PredictionForm } from "@/src/features/predictions/components/Predicitio
 import { TeamFlag } from "@/src/features/teams/components/TeamFlag";
 import { MatchPredictionStats } from "@/src/features/predictions/components/MatchPredictionStats";
 import { AppLink } from "@/src/components/navigation/AppLink";
+import { isKnockoutStage } from "@/src/features/knockout/utils/knockout-rules";
+import { KnockoutPredictionForm } from "@/src/features/matches/components/knockout-prediction/KnockoutPredictionForm";
+import { saveMatchPredictionAction } from "@/src/features/matches/actions/save-match-prediction";
 
 type MatchDetailsPageProps = {
   params: Promise<{
@@ -60,6 +63,22 @@ export default async function MatchDetailsPage({
   const matchStarted = new Date(match.kickoff_time).getTime() <= Date.now();
   const isClosed = matchStarted || match.status !== "scheduled";
 
+  const isKnockoutMatch = isKnockoutStage(match.stage);
+
+  const matchCompetitionLabel = isKnockoutMatch
+    ? match.round_label || "Faza pucharowa"
+    : formatGroupName(match.group_name || "");
+
+  const matchNumberLabel = match.match_number
+    ? `Mecz #${match.match_number}`
+    : "Mecz";
+
+  const homeTeamName =
+    match.home_team_name_pl || match.home_team_name_en || match.home_team_code;
+
+  const awayTeamName =
+    match.away_team_name_pl || match.away_team_name_en || match.away_team_code;
+
   let predictionsQuery = supabase
     .from("predictions")
     .select(
@@ -69,6 +88,8 @@ export default async function MatchDetailsPage({
       match_id,
       predicted_home_score,
       predicted_away_score,
+      predicted_winner_team_id,
+      predicted_resolution_method,
       points,
       created_at,
       updated_at,
@@ -106,8 +127,7 @@ export default async function MatchDetailsPage({
               <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
                 <div>
                   <Badge className="mb-4 rounded-full">
-                    {formatGroupName(match.group_name)} • Mecz #
-                    {match.match_number}
+                    {matchCompetitionLabel} • {matchNumberLabel}
                   </Badge>
 
                   <CardTitle className="text-4xl font-black uppercase tracking-tight md:text-5xl">
@@ -132,7 +152,7 @@ export default async function MatchDetailsPage({
                   <div className="text-center md:text-left">
                     <div className="flex justify-center md:justify-start">
                       <TeamFlag
-                        name={match.home_team_name_pl}
+                        name={homeTeamName}
                         flagCode={match.home_team_flag_code}
                         flagEmoji={match.home_team_flag_emoji}
                         className="h-20 w-20"
@@ -163,7 +183,7 @@ export default async function MatchDetailsPage({
                   <div className="text-center md:text-right">
                     <div className="flex justify-center md:justify-end">
                       <TeamFlag
-                        name={match.away_team_name_pl}
+                        name={awayTeamName}
                         flagCode={match.away_team_flag_code}
                         flagEmoji={match.away_team_flag_emoji}
                         className="h-20 w-20"
@@ -182,9 +202,15 @@ export default async function MatchDetailsPage({
               </div>
 
               <div className="mt-5 flex flex-wrap gap-3 text-sm text-muted-foreground">
-                <span className="rounded-full bg-background px-4 py-2">
-                  Kolejka {match.matchday}
-                </span>
+                {isKnockoutMatch ? (
+                  <span className="rounded-full bg-background px-4 py-2">
+                    {match.round_label || "Faza pucharowa"}
+                  </span>
+                ) : (
+                  <span className="rounded-full bg-background px-4 py-2">
+                    Kolejka {match.matchday}
+                  </span>
+                )}
 
                 {match.venue_city_pl ? (
                   <span className="inline-flex items-center gap-2 rounded-full bg-background px-4 py-2">
@@ -202,13 +228,23 @@ export default async function MatchDetailsPage({
             </CardHeader>
 
             <CardContent>
-              <PredictionForm
-                matchId={match.id}
-                initialHomeScore={myPrediction?.predicted_home_score ?? null}
-                initialAwayScore={myPrediction?.predicted_away_score ?? null}
-                hasPrediction={Boolean(myPrediction)}
-                isClosed={isClosed}
-              />
+              {isKnockoutMatch ? (
+                <KnockoutPredictionForm
+                  match={match}
+                  prediction={myPrediction}
+                  disabled={isClosed}
+                  onSubmit={saveMatchPredictionAction}
+                />
+              ) : (
+                <PredictionForm
+                  matchId={match.id}
+                  initialHomeScore={myPrediction?.predicted_home_score ?? null}
+                  initialAwayScore={myPrediction?.predicted_away_score ?? null}
+                  hasPrediction={Boolean(myPrediction)}
+                  isClosed={isClosed}
+                  onSubmit={saveMatchPredictionAction}
+                />
+              )}
             </CardContent>
           </Card>
         </div>
@@ -221,12 +257,11 @@ export default async function MatchDetailsPage({
 
             <CardContent>
               <MatchPredictionStats
+                match={match}
                 predictions={predictions}
                 myPrediction={myPrediction}
                 matchStarted={matchStarted}
                 matchFinished={match.status === "finished"}
-                homeTeamName={match.home_team_name_pl}
-                awayTeamName={match.away_team_name_pl}
               />
             </CardContent>
           </Card>
@@ -238,6 +273,7 @@ export default async function MatchDetailsPage({
 
             <CardContent>
               <PredictionsList
+                match={match}
                 predictions={predictions}
                 predictionsVisible={matchStarted}
               />
