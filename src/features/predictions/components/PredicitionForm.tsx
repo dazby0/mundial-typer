@@ -3,9 +3,15 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Loader2 } from "lucide-react";
+import { toast } from "sonner";
 import { Button } from "@/src/components/ui/button";
 import { Input } from "@/src/components/ui/input";
-import { toast } from "sonner";
+import { GroupPredictionPayload } from "@/src/features/matches/types/match.types";
+
+type PredictionFormSubmitResult = {
+  success: boolean;
+  message: string;
+};
 
 type PredictionFormProps = {
   matchId: string;
@@ -13,6 +19,9 @@ type PredictionFormProps = {
   initialAwayScore: number | null;
   hasPrediction: boolean;
   isClosed: boolean;
+  onSubmit: (
+    payload: GroupPredictionPayload,
+  ) => Promise<PredictionFormSubmitResult>;
 };
 
 export function PredictionForm({
@@ -21,6 +30,7 @@ export function PredictionForm({
   initialAwayScore,
   hasPrediction,
   isClosed,
+  onSubmit,
 }: PredictionFormProps) {
   const router = useRouter();
 
@@ -57,24 +67,16 @@ export function PredictionForm({
 
     setIsSubmitting(true);
 
-    const response = await fetch("/api/predictions", {
-      method: hasPrediction ? "PUT" : "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        matchId,
-        predictedHomeScore: parsedHomeScore,
-        predictedAwayScore: parsedAwayScore,
-      }),
+    const result = await onSubmit({
+      matchId,
+      predictedHomeScore: parsedHomeScore,
+      predictedAwayScore: parsedAwayScore,
     });
-
-    const result = await response.json();
 
     setIsSubmitting(false);
 
-    if (!response.ok) {
-      setError(result.error || "Nie udało się zapisać typu.");
+    if (!result.success) {
+      setError(result.message || "Nie udało się zapisać typu.");
       return;
     }
 

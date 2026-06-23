@@ -23,26 +23,31 @@ import {
   filterMatchesByGroup,
   filterMatchesByPredictionStatus,
   filterMatchesBySearch,
+  filterMatchesByStage,
   getAvailableGroups,
   getTargetDateKey,
   getValidGroupFilter,
   getValidMatchFilter,
   getValidSearchFilter,
+  getValidStageFilter,
 } from "@/src/features/matches/utils/match-filters";
 import { GroupFilter } from "@/src/features/matches/components/GroupFilter";
 import { MatchSearch } from "@/src/features/matches/components/MatchSearch";
+import { StageFilter } from "@/src/features/matches/components/StageFilter";
 
 type MatchesPageProps = {
   searchParams: Promise<{
     filter?: string;
     group?: string;
     search?: string;
+    stage?: string;
   }>;
 };
 
 export default async function MatchesPage({ searchParams }: MatchesPageProps) {
-  const { filter, group, search } = await searchParams;
+  const { filter, group, search, stage } = await searchParams;
   const activeFilter = getValidMatchFilter(filter);
+  const activeStage = getValidStageFilter(stage);
   const activeGroup = getValidGroupFilter(group);
   const activeSearch = getValidSearchFilter(search);
 
@@ -67,7 +72,17 @@ export default async function MatchesPage({ searchParams }: MatchesPageProps) {
 
   const { data: predictionsData, error: predictionsError } = await supabase
     .from("predictions")
-    .select("id, match_id, predicted_home_score, predicted_away_score, points")
+    .select(
+      `
+        id,
+        match_id,
+        predicted_home_score,
+        predicted_away_score,
+        predicted_winner_team_id,
+        predicted_resolution_method,
+        points
+      `,
+    )
     .eq("user_id", user.id);
 
   if (predictionsError) {
@@ -82,7 +97,11 @@ export default async function MatchesPage({ searchParams }: MatchesPageProps) {
   );
 
   const availableGroups = getAvailableGroups(matches);
-  const groupFilteredMatches = filterMatchesByGroup(matches, activeGroup);
+  const stageFilteredMatches = filterMatchesByStage(matches, activeStage);
+  const groupFilteredMatches = filterMatchesByGroup(
+    stageFilteredMatches,
+    activeGroup,
+  );
   const searchedMatches = filterMatchesBySearch(
     groupFilteredMatches,
     activeSearch,
@@ -116,15 +135,18 @@ export default async function MatchesPage({ searchParams }: MatchesPageProps) {
       <div className="rounded-[2rem] bg-white p-8 shadow-sm">
         <div className="flex flex-col gap-5 md:flex-row md:items-end md:justify-between">
           <div>
-            <Badge className="mb-4 rounded-full">Faza grupowa • 72 mecze</Badge>
+            <Badge className="mb-4 rounded-full">
+              Terminarz turnieju • od grup do finału
+            </Badge>
 
             <h1 className="text-4xl font-black uppercase tracking-tight md:text-5xl">
-              Mecze do obstawienia
+              Mecze do typowania
             </h1>
 
             <p className="mt-3 max-w-2xl text-muted-foreground">
-              Pełny terminarz fazy grupowej. Typuj przed pierwszym gwizdkiem, bo
-              potem system zamyka bramkę i nie ma płaczu.
+              Od grupowej rozgrzewki po pucharową rzeźnię. Typuj przed pierwszym
+              gwizdkiem, bo potem system zamyka bramkę, chowa klucz i udaje, że
+              nic nie słyszy.
             </p>
           </div>
 
@@ -142,6 +164,7 @@ export default async function MatchesPage({ searchParams }: MatchesPageProps) {
         <MatchFilters
           activeFilter={activeFilter}
           activeGroup={activeGroup}
+          activeStage={activeStage}
           activeSearch={activeSearch}
           allCount={matches.length}
           missingCount={missingCount}
@@ -154,17 +177,26 @@ export default async function MatchesPage({ searchParams }: MatchesPageProps) {
               <span className="text-sm font-semibold">Dodatkowe filtry</span>
             </AccordionTrigger>
             <AccordionContent className="space-y-4 pt-1">
+              <StageFilter
+                activeStage={activeStage}
+                activeFilter={activeFilter}
+                activeGroup={activeGroup}
+                activeSearch={activeSearch}
+              />
+
               <GroupFilter
                 groups={availableGroups}
                 activeGroup={activeGroup}
                 activeFilter={activeFilter}
                 activeSearch={activeSearch}
+                activeStage={activeStage}
               />
 
               <MatchSearch
                 activeSearch={activeSearch}
                 activeFilter={activeFilter}
                 activeGroup={activeGroup}
+                activeStage={activeStage}
               />
             </AccordionContent>
           </AccordionItem>

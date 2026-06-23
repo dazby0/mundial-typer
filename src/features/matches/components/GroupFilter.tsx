@@ -3,6 +3,7 @@ import { AppLink } from "@/src/components/navigation/AppLink";
 import {
   createMatchesUrl,
   MatchFilter,
+  MatchStageFilter,
 } from "@/src/features/matches/utils/match-filters";
 import { formatGroupName } from "@/src/features/matches/utils/match-formatters";
 
@@ -11,6 +12,7 @@ type GroupFilterProps = {
   activeGroup: string;
   activeFilter: MatchFilter;
   activeSearch: string;
+  activeStage: MatchStageFilter;
 };
 
 export function GroupFilter({
@@ -18,6 +20,7 @@ export function GroupFilter({
   activeGroup,
   activeFilter,
   activeSearch,
+  activeStage,
 }: GroupFilterProps) {
   return (
     <div className="mt-4 rounded-[2rem] bg-background p-4">
@@ -25,7 +28,8 @@ export function GroupFilter({
         <div>
           <p className="font-bold">Filtr grupy</p>
           <p className="text-sm text-muted-foreground">
-            Wybierz grupę i udawaj, że masz rozpisaną całą drabinkę w głowie.
+            Dla fazy grupowej wybierz grupę. Dla pucharów zostaw „wszystkie”, bo
+            tam już nie ma miękkiej gry.
           </p>
         </div>
       </div>
@@ -40,7 +44,14 @@ export function GroupFilter({
               : "shrink-0 rounded-full bg-white"
           }
         >
-          <AppLink href={createMatchesUrl(activeFilter, "all", activeSearch)}>
+          <AppLink
+            href={createMatchesUrl(
+              activeFilter,
+              "all",
+              activeSearch,
+              activeStage,
+            )}
+          >
             Wszystkie grupy
           </AppLink>
         </Button>
@@ -60,7 +71,12 @@ export function GroupFilter({
               }
             >
               <AppLink
-                href={createMatchesUrl(activeFilter, group, activeSearch)}
+                href={createMatchesUrl(
+                  activeFilter,
+                  group,
+                  activeSearch,
+                  "group_stage",
+                )}
               >
                 {formatGroupName(group)}
               </AppLink>

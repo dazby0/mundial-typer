@@ -24,6 +24,12 @@ import { PredictionForm } from "@/src/features/predictions/components/Predicitio
 import { TeamFlag } from "@/src/features/teams/components/TeamFlag";
 import { MatchPredictionStats } from "@/src/features/predictions/components/MatchPredictionStats";
 import { AppLink } from "@/src/components/navigation/AppLink";
+import {
+  getResolutionMethodLabel,
+  isKnockoutStage,
+} from "@/src/features/knockout/utils/knockout-rules";
+import { KnockoutPredictionForm } from "@/src/features/matches/components/knockout-prediction/KnockoutPredictionForm";
+import { saveMatchPredictionAction } from "@/src/features/matches/actions/save-match-prediction";
 
 type MatchDetailsPageProps = {
   params: Promise<{
@@ -60,6 +66,32 @@ export default async function MatchDetailsPage({
   const matchStarted = new Date(match.kickoff_time).getTime() <= Date.now();
   const isClosed = matchStarted || match.status !== "scheduled";
 
+  const isKnockoutMatch = isKnockoutStage(match.stage);
+
+  const matchCompetitionLabel = isKnockoutMatch
+    ? match.round_label || "Faza pucharowa"
+    : formatGroupName(match.group_name || "");
+
+  const matchNumberLabel = match.match_number
+    ? `Mecz #${match.match_number}`
+    : "Mecz";
+
+  const homeTeamName =
+    match.home_team_name_pl || match.home_team_name_en || match.home_team_code;
+
+  const awayTeamName =
+    match.away_team_name_pl || match.away_team_name_en || match.away_team_code;
+
+  const winnerTeamName =
+    match.winner_team_name_pl ||
+    match.winner_team_name_en ||
+    match.winner_team_code;
+
+  const hasPenaltyResult =
+    match.resolution_method === "penalties" &&
+    match.home_penalty_score !== null &&
+    match.away_penalty_score !== null;
+
   let predictionsQuery = supabase
     .from("predictions")
     .select(
@@ -69,6 +101,8 @@ export default async function MatchDetailsPage({
       match_id,
       predicted_home_score,
       predicted_away_score,
+      predicted_winner_team_id,
+      predicted_resolution_method,
       points,
       created_at,
       updated_at,
@@ -100,118 +134,248 @@ export default async function MatchDetailsPage({
       </Button>
 
       <div className="space-y-6">
-        <div className="grid gap-6 lg:grid-cols-[1.15fr_0.85fr]">
-          <Card className="border-0 bg-white shadow-sm">
-            <CardHeader>
-              <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
-                <div>
-                  <Badge className="mb-4 rounded-full">
-                    {formatGroupName(match.group_name)} • Mecz #
-                    {match.match_number}
-                  </Badge>
+        {isKnockoutMatch ? (
+          <div className="space-y-6">
+            <Card className="border-0 bg-white shadow-sm">
+              <CardHeader>
+                <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
+                  <div>
+                    <Badge className="mb-4 rounded-full">
+                      {matchCompetitionLabel} • {matchNumberLabel}
+                    </Badge>
 
-                  <CardTitle className="text-4xl font-black uppercase tracking-tight md:text-5xl">
-                    {match.home_team_name_pl} vs {match.away_team_name_pl}
-                  </CardTitle>
+                    <CardTitle className="text-4xl font-black uppercase tracking-tight md:text-5xl">
+                      {homeTeamName} vs {awayTeamName}
+                    </CardTitle>
 
-                  <p className="mt-3 text-muted-foreground">
-                    {formatMatchDate(match.kickoff_time)}, godz.{" "}
-                    {formatMatchTime(match.kickoff_time)}
-                  </p>
-                </div>
-
-                <Badge variant="secondary" className="rounded-full">
-                  {getMatchStatusLabel(match.status)}
-                </Badge>
-              </div>
-            </CardHeader>
-
-            <CardContent>
-              <div className="rounded-[2rem] bg-foreground p-6 text-background">
-                <div className="grid items-center gap-8 md:grid-cols-[1fr_auto_1fr]">
-                  <div className="text-center md:text-left">
-                    <div className="flex justify-center md:justify-start">
-                      <TeamFlag
-                        name={match.home_team_name_pl}
-                        flagCode={match.home_team_flag_code}
-                        flagEmoji={match.home_team_flag_emoji}
-                        className="h-20 w-20"
-                      />
-                    </div>
-
-                    <p className="mt-4 text-2xl font-black">
-                      {match.home_team_name_pl}
-                    </p>
-
-                    <p className="text-sm text-background/60">
-                      {match.home_team_code}
+                    <p className="mt-3 text-muted-foreground">
+                      {formatMatchDate(match.kickoff_time)}, godz.{" "}
+                      {formatMatchTime(match.kickoff_time)}
                     </p>
                   </div>
 
-                  <div className="text-center">
-                    <p className="font-heading text-6xl">
-                      {match.home_score === null ? "-" : match.home_score}
-                      <span className="mx-3 text-background/40">:</span>
-                      {match.away_score === null ? "-" : match.away_score}
-                    </p>
+                  <div className="flex flex-wrap gap-2 md:justify-end">
+                    <Badge variant="secondary" className="rounded-full">
+                      {getMatchStatusLabel(match.status)}
+                    </Badge>
 
-                    <p className="mt-2 text-sm text-background/60">
-                      Aktualny wynik
-                    </p>
-                  </div>
-
-                  <div className="text-center md:text-right">
-                    <div className="flex justify-center md:justify-end">
-                      <TeamFlag
-                        name={match.away_team_name_pl}
-                        flagCode={match.away_team_flag_code}
-                        flagEmoji={match.away_team_flag_emoji}
-                        className="h-20 w-20"
-                      />
-                    </div>
-
-                    <p className="mt-4 text-2xl font-black">
-                      {match.away_team_name_pl}
-                    </p>
-
-                    <p className="text-sm text-background/60">
-                      {match.away_team_code}
-                    </p>
+                    {match.resolution_method ? (
+                      <Badge
+                        variant="outline"
+                        className="rounded-full bg-white"
+                      >
+                        {getResolutionMethodLabel(match.resolution_method)}
+                      </Badge>
+                    ) : null}
                   </div>
                 </div>
-              </div>
+              </CardHeader>
 
-              <div className="mt-5 flex flex-wrap gap-3 text-sm text-muted-foreground">
-                <span className="rounded-full bg-background px-4 py-2">
-                  Kolejka {match.matchday}
-                </span>
+              <CardContent>
+                <div className="rounded-[2rem] bg-foreground p-6 text-background">
+                  <div className="grid items-center gap-8 md:grid-cols-[1fr_auto_1fr]">
+                    <div className="text-center md:text-left">
+                      <div className="flex justify-center md:justify-start">
+                        <TeamFlag
+                          name={homeTeamName}
+                          flagCode={match.home_team_flag_code}
+                          flagEmoji={match.home_team_flag_emoji}
+                          className="h-20 w-20"
+                        />
+                      </div>
 
-                {match.venue_city_pl ? (
-                  <span className="inline-flex items-center gap-2 rounded-full bg-background px-4 py-2">
-                    <MapPin className="h-4 w-4" />
-                    {match.venue_city_pl}
+                      <p className="mt-4 text-2xl font-black">{homeTeamName}</p>
+
+                      <p className="text-sm text-background/60">
+                        {match.home_team_code}
+                      </p>
+                    </div>
+
+                    <div className="text-center">
+                      <p className="font-heading text-6xl">
+                        {match.home_score === null ? "-" : match.home_score}
+                        <span className="mx-3 text-background/40">:</span>
+                        {match.away_score === null ? "-" : match.away_score}
+                      </p>
+
+                      {hasPenaltyResult ? (
+                        <p className="mt-2 font-heading text-2xl text-background/80">
+                          karne {match.home_penalty_score}:
+                          {match.away_penalty_score}
+                        </p>
+                      ) : null}
+
+                      <p className="mt-2 text-sm text-background/60">
+                        Wynik po meczu
+                      </p>
+
+                      {match.resolution_method ? (
+                        <p className="mt-2 text-sm text-background/70">
+                          {getResolutionMethodLabel(match.resolution_method)}
+                        </p>
+                      ) : null}
+
+                      {winnerTeamName ? (
+                        <div className="mt-4 rounded-2xl bg-background/10 px-4 py-3 text-sm text-background/80">
+                          Awans:{" "}
+                          <span className="font-semibold text-background">
+                            {winnerTeamName}
+                          </span>
+                        </div>
+                      ) : null}
+                    </div>
+
+                    <div className="text-center md:text-right">
+                      <div className="flex justify-center md:justify-end">
+                        <TeamFlag
+                          name={awayTeamName}
+                          flagCode={match.away_team_flag_code}
+                          flagEmoji={match.away_team_flag_emoji}
+                          className="h-20 w-20"
+                        />
+                      </div>
+
+                      <p className="mt-4 text-2xl font-black">{awayTeamName}</p>
+
+                      <p className="text-sm text-background/60">
+                        {match.away_team_code}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="mt-5 flex flex-wrap gap-3 text-sm text-muted-foreground">
+                  <span className="rounded-full bg-background px-4 py-2">
+                    {match.round_label || "Faza pucharowa"}
                   </span>
-                ) : null}
-              </div>
-            </CardContent>
-          </Card>
 
-          <Card className="border-0 bg-white shadow-sm">
-            <CardHeader>
-              <CardTitle>Twój typ</CardTitle>
-            </CardHeader>
+                  {match.venue_city_pl ? (
+                    <span className="inline-flex items-center gap-2 rounded-full bg-background px-4 py-2">
+                      <MapPin className="h-4 w-4" />
+                      {match.venue_city_pl}
+                    </span>
+                  ) : null}
+                </div>
+              </CardContent>
+            </Card>
 
-            <CardContent>
-              <PredictionForm
-                matchId={match.id}
-                initialHomeScore={myPrediction?.predicted_home_score ?? null}
-                initialAwayScore={myPrediction?.predicted_away_score ?? null}
-                hasPrediction={Boolean(myPrediction)}
-                isClosed={isClosed}
-              />
-            </CardContent>
-          </Card>
-        </div>
+            <KnockoutPredictionForm
+              match={match}
+              prediction={myPrediction}
+              disabled={isClosed}
+              onSubmit={saveMatchPredictionAction}
+            />
+          </div>
+        ) : (
+          <div className="grid gap-6 lg:grid-cols-[1.15fr_0.85fr]">
+            <Card className="border-0 bg-white shadow-sm">
+              <CardHeader>
+                <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
+                  <div>
+                    <Badge className="mb-4 rounded-full">
+                      {matchCompetitionLabel} • {matchNumberLabel}
+                    </Badge>
+
+                    <CardTitle className="text-4xl font-black uppercase tracking-tight md:text-5xl">
+                      {homeTeamName} vs {awayTeamName}
+                    </CardTitle>
+
+                    <p className="mt-3 text-muted-foreground">
+                      {formatMatchDate(match.kickoff_time)}, godz.{" "}
+                      {formatMatchTime(match.kickoff_time)}
+                    </p>
+                  </div>
+
+                  <Badge variant="secondary" className="rounded-full">
+                    {getMatchStatusLabel(match.status)}
+                  </Badge>
+                </div>
+              </CardHeader>
+
+              <CardContent>
+                <div className="rounded-[2rem] bg-foreground p-6 text-background">
+                  <div className="grid items-center gap-8 md:grid-cols-[1fr_auto_1fr]">
+                    <div className="text-center md:text-left">
+                      <div className="flex justify-center md:justify-start">
+                        <TeamFlag
+                          name={homeTeamName}
+                          flagCode={match.home_team_flag_code}
+                          flagEmoji={match.home_team_flag_emoji}
+                          className="h-20 w-20"
+                        />
+                      </div>
+
+                      <p className="mt-4 text-2xl font-black">{homeTeamName}</p>
+
+                      <p className="text-sm text-background/60">
+                        {match.home_team_code}
+                      </p>
+                    </div>
+
+                    <div className="text-center">
+                      <p className="font-heading text-6xl">
+                        {match.home_score === null ? "-" : match.home_score}
+                        <span className="mx-3 text-background/40">:</span>
+                        {match.away_score === null ? "-" : match.away_score}
+                      </p>
+
+                      <p className="mt-2 text-sm text-background/60">
+                        Aktualny wynik
+                      </p>
+                    </div>
+
+                    <div className="text-center md:text-right">
+                      <div className="flex justify-center md:justify-end">
+                        <TeamFlag
+                          name={awayTeamName}
+                          flagCode={match.away_team_flag_code}
+                          flagEmoji={match.away_team_flag_emoji}
+                          className="h-20 w-20"
+                        />
+                      </div>
+
+                      <p className="mt-4 text-2xl font-black">{awayTeamName}</p>
+
+                      <p className="text-sm text-background/60">
+                        {match.away_team_code}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="mt-5 flex flex-wrap gap-3 text-sm text-muted-foreground">
+                  <span className="rounded-full bg-background px-4 py-2">
+                    Kolejka {match.matchday}
+                  </span>
+
+                  {match.venue_city_pl ? (
+                    <span className="inline-flex items-center gap-2 rounded-full bg-background px-4 py-2">
+                      <MapPin className="h-4 w-4" />
+                      {match.venue_city_pl}
+                    </span>
+                  ) : null}
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card className="border-0 bg-white shadow-sm">
+              <CardHeader>
+                <CardTitle>Twój typ</CardTitle>
+              </CardHeader>
+
+              <CardContent>
+                <PredictionForm
+                  matchId={match.id}
+                  initialHomeScore={myPrediction?.predicted_home_score ?? null}
+                  initialAwayScore={myPrediction?.predicted_away_score ?? null}
+                  hasPrediction={Boolean(myPrediction)}
+                  isClosed={isClosed}
+                  onSubmit={saveMatchPredictionAction}
+                />
+              </CardContent>
+            </Card>
+          </div>
+        )}
 
         <div className="grid gap-6 lg:grid-cols-2">
           <Card className="border-0 bg-white shadow-sm">
@@ -221,12 +385,11 @@ export default async function MatchDetailsPage({
 
             <CardContent>
               <MatchPredictionStats
+                match={match}
                 predictions={predictions}
                 myPrediction={myPrediction}
                 matchStarted={matchStarted}
                 matchFinished={match.status === "finished"}
-                homeTeamName={match.home_team_name_pl}
-                awayTeamName={match.away_team_name_pl}
               />
             </CardContent>
           </Card>
@@ -238,6 +401,7 @@ export default async function MatchDetailsPage({
 
             <CardContent>
               <PredictionsList
+                match={match}
                 predictions={predictions}
                 predictionsVisible={matchStarted}
               />

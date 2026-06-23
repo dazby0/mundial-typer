@@ -7,6 +7,7 @@ import { Input } from "@/src/components/ui/input";
 import {
   createMatchesUrl,
   MatchFilter,
+  MatchStageFilter,
 } from "@/src/features/matches/utils/match-filters";
 import { useState } from "react";
 
@@ -14,24 +15,28 @@ type MatchSearchProps = {
   activeSearch: string;
   activeFilter: MatchFilter;
   activeGroup: string;
+  activeStage: MatchStageFilter;
 };
 
 export function MatchSearch({
   activeSearch,
   activeFilter,
   activeGroup,
+  activeStage,
 }: MatchSearchProps) {
   const router = useRouter();
   const [search, setSearch] = useState(activeSearch);
 
   function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    router.push(createMatchesUrl(activeFilter, activeGroup, search));
+    router.push(
+      createMatchesUrl(activeFilter, activeGroup, search, activeStage),
+    );
   }
 
   function handleClear() {
     setSearch("");
-    router.push(createMatchesUrl(activeFilter, activeGroup, ""));
+    router.push(createMatchesUrl(activeFilter, activeGroup, "", activeStage));
   }
 
   return (
@@ -42,7 +47,8 @@ export function MatchSearch({
       <div className="mb-3">
         <p className="font-bold">Szukaj drużyny</p>
         <p className="text-sm text-muted-foreground">
-          Wpisz np. Brazylia, Portugal, ENG albo miasto. Skauting po znajomości.
+          Wpisz np. Brazylia, Portugal, ENG, finał albo miasto. Skauting po
+          znajomości, ale działa.
         </p>
       </div>
 
@@ -53,7 +59,7 @@ export function MatchSearch({
           <Input
             value={search}
             onChange={(event) => setSearch(event.target.value)}
-            placeholder="Szukaj meczu, drużyny, kodu..."
+            placeholder="Szukaj meczu, drużyny, kodu, rundy..."
             className="h-12 rounded-full bg-white pl-11"
           />
         </div>

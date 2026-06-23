@@ -1,14 +1,17 @@
 import { Button } from "@/components/ui/button";
 import { AppLink } from "@/src/components/navigation/AppLink";
 import {
+  AdminMatchStageFilter,
   AdminMatchStatusFilter,
   createAdminMatchesUrl,
 } from "@/src/features/admin/utils/admin-match-filters";
 import { formatGroupName } from "@/src/features/matches/utils/match-formatters";
+import { MATCH_STAGE_FILTERS } from "@/src/features/matches/utils/match-filters";
 
 type AdminMatchFiltersProps = {
   activeStatus: AdminMatchStatusFilter;
   activeGroup: string;
+  activeStage: AdminMatchStageFilter;
   groups: string[];
   allCount: number;
   missingCount: number;
@@ -55,7 +58,11 @@ export function AdminMatchFilters(props: AdminMatchFiltersProps) {
               }
             >
               <AppLink
-                href={createAdminMatchesUrl(filter.value, props.activeGroup)}
+                href={createAdminMatchesUrl(
+                  filter.value,
+                  props.activeGroup,
+                  props.activeStage,
+                )}
               >
                 <span className="text-left">
                   <span className="block font-bold">{filter.label}</span>
@@ -75,9 +82,59 @@ export function AdminMatchFilters(props: AdminMatchFiltersProps) {
 
       <div className="rounded-[2rem] bg-background p-4">
         <div className="mb-3">
+          <p className="font-bold">Filtr etapu</p>
+          <p className="text-sm text-muted-foreground">
+            Wybierz etap rozgrywek. Admin VAR też zasługuje na porządek w
+            papierach.
+          </p>
+        </div>
+
+        <div className="flex gap-2 overflow-x-auto pb-1">
+          {MATCH_STAGE_FILTERS.map((stageFilter) => {
+            const isActive = props.activeStage === stageFilter.value;
+
+            const nextGroup =
+              stageFilter.value === "group_stage" || stageFilter.value === "all"
+                ? props.activeGroup
+                : "all";
+
+            return (
+              <Button
+                key={stageFilter.value}
+                asChild
+                variant={isActive ? "default" : "outline"}
+                className={
+                  isActive
+                    ? "h-auto shrink-0 rounded-2xl px-4 py-3"
+                    : "h-auto shrink-0 rounded-2xl bg-white px-4 py-3"
+                }
+              >
+                <AppLink
+                  href={createAdminMatchesUrl(
+                    props.activeStatus,
+                    nextGroup,
+                    stageFilter.value,
+                  )}
+                >
+                  <span className="text-left">
+                    <span className="block font-bold">{stageFilter.label}</span>
+                    <span className="block text-xs opacity-70">
+                      {stageFilter.description}
+                    </span>
+                  </span>
+                </AppLink>
+              </Button>
+            );
+          })}
+        </div>
+      </div>
+
+      <div className="rounded-[2rem] bg-background p-4">
+        <div className="mb-3">
           <p className="font-bold">Filtr grupy</p>
           <p className="text-sm text-muted-foreground">
-            Jak chcesz naprawiać chaos grupami, to tutaj jest pilocik.
+            Grupy mają sens tylko przed pucharową jatką. Potem zostaje już tylko
+            drabinka, pot i protokół meczowy.
           </p>
         </div>
 
@@ -91,7 +148,13 @@ export function AdminMatchFilters(props: AdminMatchFiltersProps) {
                 : "shrink-0 rounded-full bg-white"
             }
           >
-            <AppLink href={createAdminMatchesUrl(props.activeStatus, "all")}>
+            <AppLink
+              href={createAdminMatchesUrl(
+                props.activeStatus,
+                "all",
+                props.activeStage,
+              )}
+            >
               Wszystkie grupy
             </AppLink>
           </Button>
@@ -111,7 +174,11 @@ export function AdminMatchFilters(props: AdminMatchFiltersProps) {
                 }
               >
                 <AppLink
-                  href={createAdminMatchesUrl(props.activeStatus, group)}
+                  href={createAdminMatchesUrl(
+                    props.activeStatus,
+                    group,
+                    "group_stage",
+                  )}
                 >
                   {formatGroupName(group)}
                 </AppLink>

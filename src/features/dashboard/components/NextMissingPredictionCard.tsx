@@ -117,6 +117,16 @@ export function NextMissingPredictionCard({
     );
   }
 
+  const homeTeamName =
+    match.home_team_name_pl || match.home_team_name_en || match.home_team_code;
+
+  const awayTeamName =
+    match.away_team_name_pl || match.away_team_name_en || match.away_team_code;
+
+  const competitionLabel = match.group_name
+    ? formatGroupName(match.group_name)
+    : match.round_label || "Faza pucharowa";
+
   return (
     <div className="overflow-hidden rounded-[2rem] bg-foreground p-4 text-background shadow-sm sm:p-6">
       <div className="flex flex-col gap-5">
@@ -148,7 +158,7 @@ export function NextMissingPredictionCard({
               <div className="min-w-0">
                 <div className="flex min-w-0 items-center gap-3">
                   <TeamFlag
-                    name={match.home_team_name_pl}
+                    name={homeTeamName}
                     flagCode={match.home_team_flag_code}
                     flagEmoji={match.home_team_flag_emoji}
                     className="h-10 w-10 shrink-0 sm:h-12 sm:w-12"
@@ -183,7 +193,7 @@ export function NextMissingPredictionCard({
                   </div>
 
                   <TeamFlag
-                    name={match.away_team_name_pl}
+                    name={awayTeamName}
                     flagCode={match.away_team_flag_code}
                     flagEmoji={match.away_team_flag_emoji}
                     className="h-10 w-10 shrink-0 sm:h-12 sm:w-12"
@@ -194,7 +204,7 @@ export function NextMissingPredictionCard({
 
             <div className="mt-4 flex flex-wrap gap-2 text-xs text-background/70 sm:text-sm">
               <span className="rounded-full bg-background/10 px-3 py-1.5">
-                {formatGroupName(match.group_name)}
+                {competitionLabel}
               </span>
 
               <span className="rounded-full bg-background/10 px-3 py-1.5">
