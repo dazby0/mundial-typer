@@ -53,6 +53,16 @@ export function PredictionChecklistItem({
   const hasResult = match.home_score !== null && match.away_score !== null;
   const isUrgent = !prediction && !matchStarted && isMatchUrgent(match);
 
+  const homeTeamName =
+    match.home_team_name_pl || match.home_team_name_en || match.home_team_code;
+
+  const awayTeamName =
+    match.away_team_name_pl || match.away_team_name_en || match.away_team_code;
+
+  const competitionLabel = match.group_name
+    ? formatGroupName(match.group_name)
+    : match.round_label || "Faza pucharowa";
+
   return (
     <div className="rounded-3xl bg-white p-5 shadow-sm">
       <div className="flex flex-col gap-5">
@@ -60,7 +70,7 @@ export function PredictionChecklistItem({
           <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
             <div className="flex flex-wrap items-center gap-2">
               <Badge variant="secondary" className="rounded-full">
-                {formatGroupName(match.group_name)}
+                {competitionLabel}
               </Badge>
 
               <Badge variant="outline" className="rounded-full bg-white">
@@ -103,7 +113,7 @@ export function PredictionChecklistItem({
           <div className="mt-4 grid grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-center gap-2 sm:gap-4">
             <div className="flex min-w-0 items-center gap-2 sm:gap-3">
               <TeamFlag
-                name={match.home_team_name_pl}
+                name={homeTeamName}
                 flagCode={match.home_team_flag_code}
                 flagEmoji={match.home_team_flag_emoji}
                 className="h-8 w-8 shrink-0 sm:h-11 sm:w-11"
@@ -153,7 +163,7 @@ export function PredictionChecklistItem({
               </div>
 
               <TeamFlag
-                name={match.away_team_name_pl}
+                name={awayTeamName}
                 flagCode={match.away_team_flag_code}
                 flagEmoji={match.away_team_flag_emoji}
                 className="h-8 w-8 shrink-0 sm:h-11 sm:w-11"

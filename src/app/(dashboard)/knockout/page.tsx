@@ -4,6 +4,8 @@ import { KnockoutBracketScrollArea } from "@/src/features/knockout/components/Kn
 import { KnockoutHeaderCard } from "@/src/features/knockout/components/KnockoutHeaderCard";
 import { KnockoutMatchPreview } from "@/src/features/knockout/types/knockout.types";
 
+export const dynamic = "force-dynamic";
+
 export default async function KnockoutPage() {
   const supabase = await createClient();
 
@@ -16,7 +18,7 @@ export default async function KnockoutPage() {
   }
 
   const { data, error } = await supabase
-    .from("knockout_matches_preview")
+    .from("knockout_bracket_view")
     .select("*")
     .order("round_order", { ascending: true })
     .order("match_order", { ascending: true });

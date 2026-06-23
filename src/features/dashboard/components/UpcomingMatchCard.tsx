@@ -21,13 +21,23 @@ export function UpcomingMatchCard({
   match,
   prediction,
 }: UpcomingMatchCardProps) {
+  const homeTeamName =
+    match.home_team_name_pl || match.home_team_name_en || match.home_team_code;
+
+  const awayTeamName =
+    match.away_team_name_pl || match.away_team_name_en || match.away_team_code;
+
+  const competitionLabel = match.group_name
+    ? formatGroupName(match.group_name)
+    : match.round_label || "Faza pucharowa";
+
   return (
     <div className="rounded-[2rem] bg-white p-5 shadow-sm">
       <div className="flex flex-col gap-5 md:flex-row md:items-center md:justify-between">
         <div className="min-w-0 flex-1">
           <div className="flex flex-wrap items-center gap-2 text-sm text-muted-foreground">
             <span className="rounded-full bg-background px-3 py-1.5">
-              {formatGroupName(match.group_name)}
+              {competitionLabel}
             </span>
 
             <span className="inline-flex items-center gap-2 rounded-full bg-background px-3 py-1.5">
@@ -37,18 +47,18 @@ export function UpcomingMatchCard({
             </span>
           </div>
 
-          <div className="mt-4 grid gap-2 sm:gap-4 grid-cols-[1fr_auto_1fr] items-center">
+          <div className="mt-4 grid grid-cols-[1fr_auto_1fr] items-center gap-2 sm:gap-4">
             <div className="flex items-center gap-2 sm:gap-3">
               <TeamFlag
-                name={match.home_team_name_pl}
+                name={homeTeamName}
                 flagCode={match.home_team_flag_code}
                 flagEmoji={match.home_team_flag_emoji}
                 className="h-9 w-9 sm:h-11 sm:w-11"
               />
 
               <div className="min-w-0">
-                <p className="truncate font-black text-sm sm:text-base">
-                  {match.home_team_name_pl}
+                <p className="truncate text-sm font-black sm:text-base">
+                  {homeTeamName}
                 </p>
                 <p className="text-xs text-muted-foreground">
                   {match.home_team_code}
@@ -56,14 +66,14 @@ export function UpcomingMatchCard({
               </div>
             </div>
 
-            <div className="text-center font-heading text-lg sm:text-2xl text-muted-foreground">
+            <div className="text-center font-heading text-lg text-muted-foreground sm:text-2xl">
               VS
             </div>
 
-            <div className="flex items-center gap-2 sm:gap-3 justify-end">
+            <div className="flex items-center justify-end gap-2 sm:gap-3">
               <div className="min-w-0 sm:text-right">
-                <p className="truncate font-black text-sm sm:text-base">
-                  {match.away_team_name_pl}
+                <p className="truncate text-sm font-black sm:text-base">
+                  {awayTeamName}
                 </p>
                 <p className="text-xs text-muted-foreground">
                   {match.away_team_code}
@@ -71,7 +81,7 @@ export function UpcomingMatchCard({
               </div>
 
               <TeamFlag
-                name={match.away_team_name_pl}
+                name={awayTeamName}
                 flagCode={match.away_team_flag_code}
                 flagEmoji={match.away_team_flag_emoji}
                 className="h-9 w-9 sm:h-11 sm:w-11"

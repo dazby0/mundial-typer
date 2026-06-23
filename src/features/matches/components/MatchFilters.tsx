@@ -3,12 +3,14 @@ import { AppLink } from "@/src/components/navigation/AppLink";
 import {
   createMatchesUrl,
   MatchFilter,
+  MatchStageFilter,
 } from "@/src/features/matches/utils/match-filters";
 
 type MatchFiltersProps = {
   activeFilter: MatchFilter;
   activeGroup: string;
   activeSearch: string;
+  activeStage: MatchStageFilter;
   allCount: number;
   missingCount: number;
   confirmedCount: number;
@@ -57,6 +59,7 @@ export function MatchFilters(props: MatchFiltersProps) {
                 filter.value,
                 props.activeGroup,
                 props.activeSearch,
+                props.activeStage,
               )}
             >
               <span className="text-left">
